@@ -1,0 +1,6 @@
+*.o
+moc_*.cpp
+*.pro.user
+Makefile
+*.iso
+AnyLoader
