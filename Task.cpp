@@ -1,8 +1,9 @@
 #include "Task.h"
 #include <QtConcurrentRun>
+#include <QDebug>
 
 Task::Task(bool threaded, QObject *parent) : QObject(parent),
-	m_terminated(false)
+	m_isRunning(false)
 {
 	if (threaded) {
 		m_watcher = new QFutureWatcher<bool>;
@@ -13,9 +14,11 @@ Task::Task(bool threaded, QObject *parent) : QObject(parent),
 }
 void Task::runTask(Movie &movie)
 {
-	if (!canRunTask(movie))
+	if (!canRunTask(movie)) {
+		qDebug() << this->objectName() << "is already running while attempting to run on" << movie.title();
 		return;
-	m_terminated = false;
+	}
+	m_isRunning = true;
 	if (m_watcher)
 		m_watcher->setFuture(QtConcurrent::run(this, &Task::executeTask, movie));
 	else
@@ -23,20 +26,20 @@ void Task::runTask(Movie &movie)
 }
 void Task::finished()
 {
-	if (!m_terminated)
-		emit completed(m_watcher->future().result());
-}
-QFutureWatcher<bool>* Task::watcher() const
-{
-	return m_watcher;
+	setCompleted(m_watcher->future().result());
 }
 void Task::terminate()
 {
-	m_terminated = true;
 	kill();
-	emit completed(false);
+	if (!m_watcher)
+		setCompleted(false);
 }
-bool Task::terminated() const
+void Task::setCompleted(bool result)
 {
-	return m_terminated;
+	m_isRunning = false;
+	emit completed(result);
+}
+bool Task::isRunning() const
+{
+	return m_isRunning;
 }

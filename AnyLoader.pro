@@ -10,7 +10,14 @@ TEMPLATE = app
 SOURCES += main.cpp \
     Movie.cpp \
     Task.cpp \
-    EncodeTask.cpp
+    EncodeTask.cpp \
+    RipTask.cpp \
+    DVDDrive.cpp
 HEADERS += Movie.h \
     Task.h \
-    EncodeTask.h
+    EncodeTask.h \
+    RipTask.h \
+    DVDDrive.h
+QT += dbus
+LIBS += -ldvdcss \
+    -ldvdread

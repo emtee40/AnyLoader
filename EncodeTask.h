@@ -10,8 +10,8 @@ class EncodeTask : public Task
 	Q_OBJECT
 public:
 	EncodeTask(QObject *parent = 0);
-	bool canRunTask(Movie &movie);
 	~EncodeTask();
+	bool canRunTask(const Movie &movie) const;
 protected:
 	bool executeTask(Movie &movie);
 private:

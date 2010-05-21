@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QDebug>
 
-EncodeTask::EncodeTask(QObject *parent) : Task(parent),
+EncodeTask::EncodeTask(QObject *parent) : Task(false, parent),
 	m_process(0),
 	m_movie(0)
 {
@@ -45,7 +45,7 @@ bool EncodeTask::executeTask(Movie &movie)
 	m_process->start(QLatin1String("./HandBrakeCLI"), arguments, QIODevice::ReadOnly);
 	return true;
 }
-bool EncodeTask::canRunTask(Movie &movie)
+bool EncodeTask::canRunTask(const Movie &movie) const
 {
 	return movie.hasRipped();
 }
@@ -80,6 +80,8 @@ void EncodeTask::kill()
 		m_process->terminate();
 		m_process->deleteLater();
 		m_process = 0;
+	}
+	if (m_movie) {
 		QFile::remove(m_movie->mp4Location());
 		m_movie = 0;
 	}
@@ -92,8 +94,9 @@ void EncodeTask::finished(int exitCode, QProcess::ExitStatus exitStatus)
 		m_process->terminate();
 		m_process->deleteLater();
 		m_process = 0;
+		m_movie->setEncoded(true);
 		m_movie = 0;
-		emit completed(true);
+		setCompleted(true);
 	}
 	else
 		terminate();
@@ -101,5 +104,5 @@ void EncodeTask::finished(int exitCode, QProcess::ExitStatus exitStatus)
 void EncodeTask::error()
 {
 	kill();
-	emit completed(false);
+	setCompleted(false);
 }
