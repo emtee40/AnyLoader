@@ -104,7 +104,6 @@ void Movie::setVideoTrack(quint8 videoTrack)
 {
 	m_videoTrack = videoTrack;
 }
-
 QList<quint8>* Movie::audioTracks()
 {
 	return &m_audioTracks;
