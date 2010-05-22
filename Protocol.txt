@@ -4,10 +4,14 @@ followed by \n.
 
 'error' is returned on error.
 
+If |||||||| is returned, the following lines are all part of the response until the next ||||||||.
+
+If ||||||||||||| is returned, the following lines are all part of the response until the next |||||||||||||, and they should be viewed as an array of entries.
+
 Commands:
 
 getTitleInformation|MOVIE_TITLE
-	Returns print-out from handbrake showing track/chapter/audio break-down.
+	Returns print-out from handbrake showing track/chapter/audio break-down. Multi-line.
 
 getTitles
 	Returns list of titles as:

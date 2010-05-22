@@ -6,7 +6,9 @@
 
 Listener::Listener(const QHostAddress &address, quint16 port, QObject *parent) : QObject(parent),
 	m_controller(this),
-	SPACER('|')
+	SPACER('|'),
+	MULTIENTRY("|||||||||||||\n"),
+	MULTILINE("||||||||\n")
 {
 	connect(&m_server, SIGNAL(newConnection()), this, SLOT(newConnection()));
 	m_server.listen(address, port);
@@ -35,12 +37,13 @@ void Listener::readyRead()
 				streamer << "error" << endl;
 				continue;
 			}
-			streamer << TitleInformation::readTitles(movie->isoLocation()) << endl;
+			streamer << MULTILINE << TitleInformation::readTitles(movie->isoLocation()) << endl << MULTILINE;
 		} else if (call.at(0) == "getTitles") {
 			if (m_controller.movies().count() == 0) {
 				streamer << "error" << endl;
 				continue;
 			}
+			streamer << MULTIENTRY;
 			foreach (Movie *movie, m_controller.movies()) {
 				QString audioTracks = "auto";
 				if (movie->audioTracks()->length() > 0) {
@@ -53,6 +56,7 @@ void Listener::readyRead()
 				}
 				streamer << movie->title() << SPACER << movie->hasRipped() << SPACER << movie->hasEncoded() << SPACER << movie->hasUploaded() << SPACER << movie->videoTrack() << SPACER << audioTracks << endl;
 			}
+			streamer << MULTIENTRY;
 		} else if (call.at(0) == "addISO" && call.length() == 2) {
 			if (!QFile::exists(call.at(1))) {
 				streamer << "error" << endl;
@@ -69,8 +73,10 @@ void Listener::readyRead()
 				streamer << "error" << endl;
 				continue;
 			}
+			streamer << MULTIENTRY;
 			foreach(movie, movies)
 				streamer << movie->title() << endl;
+			streamer << MULTIENTRY;
 		} else if (call.at(0) == "setVideoTrack" && call.length() == 3) {
 			movie = m_controller.movieForTitle(call.at(1));
 			if (!movie) {

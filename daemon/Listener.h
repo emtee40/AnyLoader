@@ -17,6 +17,8 @@ private:
 	QTcpServer m_server;
 	Controller m_controller;
 	const QChar SPACER;
+	const QLatin1String MULTIENTRY;
+	const QLatin1String MULTILINE;
 
 private slots:
 	void newConnection();
