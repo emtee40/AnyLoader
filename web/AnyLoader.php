@@ -84,5 +84,8 @@ class AnyLoader {
 	public function terminateUpload() {
 		return $this->request("terminateUpload");
 	}
+	public function startTerminatedTasks() {
+		return $this->request("startTerminatedTasks");
+	}
 }
 ?>
