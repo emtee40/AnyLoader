@@ -4,7 +4,7 @@
 <script language="JavaScript">
 function setVideoTrack(movie)
 {
-	var track = parseInt(prompt("After looking at the list of video tracks below, choose ONE track by entering the track number here.\n\nNote: Setting the video track will start the encoding, so if you plan to choose a custom audio track, you should choose the audio track(s) first.", "1"));
+	var track = parseInt(prompt("After looking at the list of video tracks below, choose ONE track by entering the track number here.", "1"));
 	if (!isNaN(track))
 		location.href = "setValue.php?value=videoTrack&movie=" + encodeURIComponent(movie) + "&track=" + track;
 }
