@@ -23,13 +23,14 @@ HEADERS += Movie.h \
     Controller.h \
     TitleInformation.h \
     Listener.h
-ripping {
+ripping { 
     QT += dbus
     LIBS += -ldvdcss \
-	-ldvdread
+        -ldvdread
     DEFINES += ENABLE_RIPPING
     HEADERS += RipTask.h \
-	DVDDrive.h
+        DVDDrive.h
     SOURCES += RipTask.cpp \
-	DVDDrive.cpp
+        DVDDrive.cpp
 }
+OTHER_FILES += Protocol.txt
