@@ -1,7 +1,5 @@
-#include "Controller.h"
-#include "Movie.h"
-#include "DVDDrive.h"
-#include "TitleInformation.h"
+#include "Listener.h"
+#include <QHostAddress>
 #include <QCoreApplication>
 
 int main(int argc, char *argv[])
@@ -14,7 +12,8 @@ int main(int argc, char *argv[])
 	//Movie *movie = new Movie("The Sound Of Music", "/home/zx2c4/AnyLoader/The Sound Of Music/Image - The Sound Of Music.iso");
 	//movie->setVideoTrack(1);
 	//controller.addMovie(movie);
-	TitleInformation ti;
-	ti.readTitles("/home/zx2c4/AnyLoader/The Sound Of Music/Image - The Sound Of Music.iso");
+	//TitleInformation ti;
+	//ti.readTitles("/home/zx2c4/AnyLoader/The Sound Of Music/Image - The Sound Of Music.iso");
+	Listener listener(QHostAddress("127.0.0.1"), 1122);
 	return a.exec();
 }

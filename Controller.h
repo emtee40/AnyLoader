@@ -9,6 +9,7 @@
 #endif
 #include <QObject>
 #include <QLinkedList>
+#include <QStringList>
 
 class Controller : public QObject
 {
@@ -16,6 +17,10 @@ class Controller : public QObject
 public:
 	Controller(QObject *parent = 0);
 	void addMovie(Movie *movie);
+	Movie* movieForTitle(const QString &title);
+	Movie* addISO(const QString &fileName);
+	QLinkedList<Movie*> movies() const;
+
 private:
 	QLinkedList<Movie*> m_movies;
 #ifdef ENABLE_RIPPING

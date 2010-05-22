@@ -38,6 +38,8 @@ public:
 
 	static QString fileNameFromTitle(const QString &title, const QString &type, const QString &extension);
 	static QString titleFromISOName(const QString &isoName);
+	static QString fileNameFromFileName(const QString &fileName, const QString &newExtension);
+
 
 private:
 	QString m_title;

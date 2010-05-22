@@ -1,5 +1,6 @@
 #include "Controller.h"
 #include <QDir>
+#include <QFileInfo>
 
 Controller::Controller(QObject *parent) : QObject(parent),
 #ifdef ENABLE_RIPPING
@@ -32,3 +33,21 @@ void Controller::addMovie(Movie *movie)
 	movie->setParent(this);
 	runTasks(movie);
 }
+Movie* Controller::addISO(const QString &fileName)
+{
+	Movie *movie = new Movie(Movie::titleFromISOName(QFileInfo(fileName).baseName()), fileName, this);
+	addMovie(movie);
+	return movie;
+}
+Movie* Controller::movieForTitle(const QString &title)
+{
+	foreach(Movie* movie, m_movies)
+		if (movie->title() == title)
+			return movie;
+	return 0;
+}
+QLinkedList<Movie*> Controller::movies() const
+{
+	return m_movies;
+}
+

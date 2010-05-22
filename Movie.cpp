@@ -1,6 +1,7 @@
 #include "Movie.h"
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QCoreApplication>
 
 #ifdef ENABLE_RIPPING
@@ -18,7 +19,7 @@ Movie::Movie(const QString &title, QObject *parent) : QObject(parent),
 Movie::Movie(const QString &title, const QString &isoLocation, QObject *parent) : QObject(parent),
 		m_title(title),
 		m_isoLocation(isoLocation),
-		m_mp4Location(fileNameFromTitle(title, QLatin1String("Encode"), QLatin1String("mp4"))),
+		m_mp4Location(fileNameFromFileName(isoLocation, QLatin1String("mp4"))),
 		m_videoTrack(0),
 		m_hasRipped(QFile::exists(isoLocation)),
 		m_hasEncoded(false),
@@ -42,6 +43,11 @@ QString Movie::fileNameFromTitle(const QString &title, const QString &type, cons
 	QString directory = QString("%1/%2/%3").arg(QDir::homePath(), QCoreApplication::applicationName(), title);
 	QDir().mkpath(directory);
 	return QString("%1/%2 - %3.%4").arg(directory, type, title, extension);
+}
+QString Movie::fileNameFromFileName(const QString &fileName, const QString &newExtension)
+{
+	QFileInfo info(fileName);
+	return QString("%1/%2.%3").arg(info.path(), info.baseName(), newExtension);
 }
 QString Movie::titleFromISOName(const QString &isoName)
 {
