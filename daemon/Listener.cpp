@@ -20,11 +20,11 @@ void Listener::newConnection()
 void Listener::readyRead()
 {
 	QTcpSocket *socket = qobject_cast<QTcpSocket*>(sender());
-	if (!socket) return;
+	if (!socket || !socket->canReadLine()) return;
+	QTextStream streamer(socket);
 	while (socket->canReadLine()) {
-		QTextStream streamer(socket);
 		QStringList call = streamer.readLine().split(SPACER);
-		if (call.length() == 0) {
+		if (call.length() == 0 || call.at(0).length() == 0) {
 			socket->close();
 			return;
 		}
@@ -121,5 +121,4 @@ void Listener::readyRead()
 			streamer << "error" << endl;
 		}
 	}
-	socket->close();
 }

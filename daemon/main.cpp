@@ -8,6 +8,6 @@ int main(int argc, char *argv[])
 	a.setApplicationName(QLatin1String("AnyLoader"));
 	a.setOrganizationName(QLatin1String("AnyClip"));
 	a.setOrganizationDomain(QLatin1String("anyclip.com"));
-	Listener listener(QHostAddress("127.0.0.1"), 1122);
+	Listener listener(QHostAddress("127.0.0.1"), 8964);
 	return a.exec();
 }
