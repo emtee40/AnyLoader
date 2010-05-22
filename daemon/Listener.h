@@ -11,7 +11,8 @@ class Listener : public QObject
 {
 	Q_OBJECT
 public:
-	Listener(const QHostAddress &address, quint16 port, QObject *parent = 0);
+	Listener(QObject *parent = 0);
+	bool start(const QHostAddress &address, quint16 port);
 
 private:
 	QTcpServer m_server;

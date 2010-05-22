@@ -4,14 +4,19 @@
 #include <QStringList>
 #include <QFile>
 
-Listener::Listener(const QHostAddress &address, quint16 port, QObject *parent) : QObject(parent),
+Listener::Listener(QObject *parent) : QObject(parent),
 	m_controller(this),
 	SPACER('|'),
 	MULTIENTRY("|||||||||||||\n"),
 	MULTILINE("||||||||\n")
 {
 	connect(&m_server, SIGNAL(newConnection()), this, SLOT(newConnection()));
-	m_server.listen(address, port);
+}
+bool Listener::start(const QHostAddress &address, quint16 port)
+{
+	if (m_server.isListening())
+		m_server.close();
+	return m_server.listen(address, port);
 }
 void Listener::newConnection()
 {
