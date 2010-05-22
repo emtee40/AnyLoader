@@ -46,3 +46,6 @@ terminateEncode
 
 terminateUpload
 	Terminates upload and returns 'success'.
+
+startTerminatedTasks
+	Starts tasks that were previously terminated.

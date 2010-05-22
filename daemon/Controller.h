@@ -37,7 +37,7 @@ private:
 
 	void runTasks(Movie *movie);
 
-private slots:
+public slots:
 	void runTasks();
 
 };

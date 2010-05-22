@@ -134,6 +134,9 @@ void Listener::readyRead()
 				streamer << "success" << endl;
 			} else
 				streamer << "error" << endl;
+		} else if (call.at(0) == "startTerminatedTasks") {
+			m_controller.runTasks();
+			streamer << "success" << endl;
 		} else {
 			streamer << "error" << endl;
 		}
