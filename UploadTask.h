@@ -9,10 +9,10 @@ class UploadTask : public Task
 public:
 	UploadTask(QObject *parent = 0);
 	~UploadTask();
-	bool canRunTask(const Movie &movie) const;
+	bool canRunTask(const Movie *movie) const;
 
 protected:
-	bool executeTask(Movie &movie);
+	bool executeTask(Movie *movie);
 	void kill();
 
 };

@@ -12,10 +12,10 @@ Task::Task(bool threaded, QObject *parent) : QObject(parent),
 	} else
 		m_watcher = 0;
 }
-void Task::runTask(Movie &movie)
+void Task::runTask(Movie *movie)
 {
 	if (!canRunTask(movie)) {
-		qDebug() << this->objectName() << "is already running while attempting to run on" << movie.title();
+		qDebug() << this->objectName() << "is already running while attempting to run on" << movie->title();
 		return;
 	}
 	m_isRunning = true;

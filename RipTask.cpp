@@ -33,20 +33,19 @@ int RipTask::cmpvob(const void *p1, const void *p2)
 		return 0;
 }
 
-bool RipTask::executeTask(Movie &movie)
+bool RipTask::executeTask(Movie *movie)
 {
 	m_locker.lockForWrite();
 	m_terminate = false;
 	m_locker.unlock();
-	bool ret = saveImageToPath(movie.isoLocation());
+	bool ret = saveImageToPath(movie->isoLocation());
 	if (ret)
-		movie.setRipped(true);
+		movie->setRipped(true);
 	return ret;
 }
-bool RipTask::canRunTask(const Movie &movie) const
+bool RipTask::canRunTask(const Movie *movie) const
 {
-	Q_UNUSED(movie)
-	return true;
+	return !movie->hasRipped() && !movie->hasUploaded() && !movie->hasEncoded();
 }
 
 bool RipTask::saveImageToPath(const QString &path)

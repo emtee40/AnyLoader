@@ -13,7 +13,7 @@ public:
 	~RipTask();
 	bool saveImageToDevice(QIODevice &out);
 	bool saveImageToPath(const QString &path);
-	bool canRunTask(const Movie &movie) const;
+	bool canRunTask(const Movie *movie) const;
 public slots:
 	void kill();
 private:
@@ -24,7 +24,7 @@ private:
 	QReadWriteLock m_locker;
 	bool m_terminate;
 protected:
-	bool executeTask(Movie &movie);
+	bool executeTask(Movie *movie);
 signals:
 	void extractProgress(int current, int total);
 };

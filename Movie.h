@@ -13,7 +13,6 @@ public:
 	Movie(const QString &title, QObject *parent = 0);
 	Movie(const QString &title, const QString &isoLocation, QObject *parent = 0);
 	Movie(const QString &title, const QString &isoLocation, const QString &mp4Location, QObject *parent = 0);
-	Movie(const Movie &movie);
 
 	QString title() const;
 	void setTitle(const QString &title);

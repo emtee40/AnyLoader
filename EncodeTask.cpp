@@ -15,16 +15,16 @@ EncodeTask::~EncodeTask()
 	disconnect(this, 0, 0, 0);
 	kill();
 }
-bool EncodeTask::executeTask(Movie &movie)
+bool EncodeTask::executeTask(Movie *movie)
 {
-	m_movie = &movie;
+	m_movie = movie;
 	m_process = new QProcess(this);
 	connect(m_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(error()));
 	connect(m_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
 	connect(m_process, SIGNAL(readyRead()), this, SLOT(readyRead()));
 	QStringList arguments;
-	arguments << "-i" << movie.isoLocation();
-	arguments << "-o" << movie.mp4Location();
+	arguments << "-i" << movie->isoLocation();
+	arguments << "-o" << movie->mp4Location();
 	arguments << "-e" << "x264";
 	arguments << "-b" << "500";
 	arguments << "-2" << "-T";
@@ -34,7 +34,7 @@ bool EncodeTask::executeTask(Movie &movie)
 	arguments << "-6" << "stereo";
 	arguments << "-N" << "eng" << "--native-dub";
 	arguments << "-f" << "mp4";
-	arguments << "--dvdnav" << "-t" << QString::number(movie.videoTrack());
+	arguments << "--dvdnav" << "-t" << QString::number(movie->videoTrack());
 	//TODO: audioTracks
 	arguments << "--loose-anamorphic" << "--modulus" << "16";
 	arguments << "--optimize" << "--decomb" << "--deblock" << "--denoise=\"weak\"";
@@ -45,9 +45,9 @@ bool EncodeTask::executeTask(Movie &movie)
 	m_process->start(QLatin1String("./HandBrakeCLI"), arguments, QIODevice::ReadOnly);
 	return true;
 }
-bool EncodeTask::canRunTask(const Movie &movie) const
+bool EncodeTask::canRunTask(const Movie *movie) const
 {
-	return movie.hasRipped();
+	return movie->hasRipped() && !movie->hasEncoded() && !movie->hasUploaded();
 }
 
 void EncodeTask::readyRead()

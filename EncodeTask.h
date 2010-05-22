@@ -11,9 +11,9 @@ class EncodeTask : public Task
 public:
 	EncodeTask(QObject *parent = 0);
 	~EncodeTask();
-	bool canRunTask(const Movie &movie) const;
+	bool canRunTask(const Movie *movie) const;
 protected:
-	bool executeTask(Movie &movie);
+	bool executeTask(Movie *movie);
 private:
 	QProcess *m_process;
 	Movie *m_movie;

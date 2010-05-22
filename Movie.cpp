@@ -28,17 +28,6 @@ Movie::Movie(const QString &title, const QString &isoLocation, const QString &mp
 		m_hasUploaded(false)
 {
 }
-Movie::Movie(const Movie &movie) : QObject(movie.parent()),
-		m_title(movie.m_title),
-		m_isoLocation(movie.m_isoLocation),
-		m_mp4Location(movie.m_mp4Location),
-		m_videoTrack(movie.m_videoTrack),
-		m_audioTracks(movie.m_audioTracks),
-		m_hasRipped(movie.m_hasRipped),
-		m_hasEncoded(movie.m_hasEncoded),
-		m_hasUploaded(movie.m_hasUploaded)
-{
-}
 
 QString Movie::title() const
 {

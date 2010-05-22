@@ -9,13 +9,13 @@ class Task : public QObject
 {
 	Q_OBJECT
 public:
-	void runTask(Movie &movie);
-	virtual bool canRunTask(const Movie &movie) const = 0;
+	void runTask(Movie *movie);
+	virtual bool canRunTask(const Movie *movie) const = 0;
 	bool isRunning() const;
 
 protected:
 	Task(bool threaded, QObject *parent = 0);
-	virtual bool executeTask(Movie &movie) = 0;
+	virtual bool executeTask(Movie *movie) = 0;
 	virtual void kill() = 0;
 	void setCompleted(bool result);
 
