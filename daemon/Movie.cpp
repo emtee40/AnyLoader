@@ -22,7 +22,7 @@ Movie::Movie(const QString &title, const QString &isoLocation, QObject *parent) 
 		m_mp4Location(fileNameFromFileName(isoLocation, QLatin1String("mp4"))),
 		m_videoTrack(0),
 		m_hasRipped(QFile::exists(isoLocation)),
-		m_hasEncoded(false),
+		m_hasEncoded(QFile::exists(m_mp4Location)),
 		m_hasUploaded(false)
 {
 }

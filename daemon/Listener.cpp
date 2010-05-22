@@ -97,21 +97,22 @@ void Listener::readyRead()
 					movie->audioTracks()->append(call.at(i).toInt());
 			}
 			streamer << "success" << endl;
-		}
+		} else if (call.at(0) == "ripStatus") {
 #ifdef ENABLE_RIPPING
-		else if (call.at(0) == "ripStatus") {
 			if (m_controller.ripTask()->isRunning())
 				streamer << m_controller.ripTask()->currentMovie()->title() << SPACER << m_controller.ripTask()->status() << endl;
 			else
+#endif
 				streamer << "error" << endl;
 		} else if (call.at(0) == "terminateRip") {
+#ifdef ENABLE_RIPPING
 			if (m_controller.ripTask()->isRunning()) {
 				m_controller.ripTask()->terminate();
 				streamer << "success" << endl;
 			} else
+#endif
 				streamer << "error" << endl;
 		}
-#endif
 		else if(call.at(0) == "encodeStatus") {
 			if (m_controller.encodeTask()->isRunning())
 				streamer << m_controller.encodeTask()->currentMovie()->title() << SPACER << m_controller.encodeTask()->status() << endl;

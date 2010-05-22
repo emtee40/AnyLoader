@@ -2,7 +2,9 @@
 class AnyLoader {
 	function __construct($host = "localhost", $port = 8964)
 	{
-		$this->socket = pfsockopen($host, $port);
+		$this->socket = @pfsockopen($host, $port, $errno, $errmsg);
+		if (!$this->socket)
+			die($errmsg);
 	}
 	private function request() {
 		$args = func_get_args();
