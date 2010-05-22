@@ -1,6 +1,8 @@
 Each command is:
-FUNCTIONNAME|Arg1|Arg2|Arg3|...|ArgN
+    FUNCTIONNAME|Arg1|Arg2|Arg3|...|ArgN
 followed by \n.
+
+'error' is returned on error.
 
 Commands:
 
@@ -12,7 +14,7 @@ getTitles
 addISO|FILE_NAME
     Adds ISO to queue and names it using standard transformation. Returns generated MOVIE_TITLE.
 setVideoTrack|MOVIE_TITLE|TRACK_NUMBER
-    Sets video track of MOVIE_TITLE to TRACK_NUMBER. Returns success.
+    Sets video track of MOVIE_TITLE to TRACK_NUMBER. Returns 'success'.
 ripStatus
     Returns string of rip status or 'not running'.
 encodeStatus
