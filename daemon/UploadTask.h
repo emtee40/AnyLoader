@@ -2,6 +2,7 @@
 #define UPLOADTASK_H
 
 #include "Task.h"
+#include <QFtp>
 
 class UploadTask : public Task
 {
@@ -15,6 +16,9 @@ public:
 protected:
 	bool executeTask(Movie *movie);
 	void kill();
+
+private:
+	QFtp m_ftp;
 
 };
 

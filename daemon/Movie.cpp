@@ -1,4 +1,5 @@
 #include "Movie.h"
+#include "EncodeTarget.h"
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -8,46 +9,39 @@
 Movie::Movie(const QString &title, QObject *parent) : QObject(parent),
 		m_title(title),
 		m_isoLocation(fileNameFromTitle(title, QLatin1String("Image"), QLatin1String("iso"))),
-		m_mp4Location(fileNameFromTitle(title, QLatin1String("Encode"), QLatin1String("mp4"))),
 		m_videoTrack(0),
 		m_hasRipped(false),
-		m_hasEncoded(false),
 		m_hasUploaded(false)
 {
+	setMp4LocationDirectory(QFileInfo(m_isoLocation).path());
 }
 #endif
 Movie::Movie(const QString &title, const QString &isoLocation, QObject *parent) : QObject(parent),
 		m_title(title),
 		m_isoLocation(isoLocation),
-		m_mp4Location(fileNameFromFileName(isoLocation, QLatin1String("mp4"))),
 		m_videoTrack(0),
 		m_hasRipped(QFile::exists(isoLocation)),
-		m_hasEncoded(QFile::exists(m_mp4Location)),
 		m_hasUploaded(false)
 {
+
+	setMp4LocationDirectory(QFileInfo(m_isoLocation).path());
 }
-Movie::Movie(const QString &title, const QString &isoLocation, const QString &mp4Location, QObject *parent) : QObject(parent),
+Movie::Movie(const QString &title, const QString &isoLocation, const QString &mp4LocationDirectory, QObject *parent) : QObject(parent),
 		m_title(title),
 		m_isoLocation(isoLocation),
-		m_mp4Location(mp4Location),
 		m_videoTrack(0),
 		m_hasRipped(QFile::exists(isoLocation)),
-		m_hasEncoded(QFile::exists(mp4Location)),
 		m_hasUploaded(false)
 {
+	setMp4LocationDirectory(mp4LocationDirectory);
 }
 
 
-QString Movie::fileNameFromTitle(const QString &title, const QString &type, const QString &extension)
+QString Movie::fileNameFromTitle(const QString &title, const QString &extension)
 {
 	QString directory = QString("%1/%2/%3").arg(QDir::homePath(), QCoreApplication::applicationName(), title);
 	QDir().mkpath(directory);
-	return QString("%1/%2 - %3.%4").arg(directory, type, title, extension);
-}
-QString Movie::fileNameFromFileName(const QString &fileName, const QString &newExtension)
-{
-	QFileInfo info(fileName);
-	return QString("%1/%2.%3").arg(info.path(), info.baseName(), newExtension);
+	return QString("%1/%2.%3").arg(directory, title, extension);
 }
 QString Movie::titleFromISOName(const QString &isoName)
 {
@@ -87,14 +81,18 @@ void Movie::setRipped(bool ripped)
 	if (m_hasRipped)
 		emit statusChanged();
 }
-QString Movie::mp4Location() const
+QStringList Movie::mp4Locations() const
 {
-	return m_mp4Location;
+	return m_mp4Locations;
 }
-void Movie::setMp4Location(const QString &mp4Location)
+void Movie::setMp4LocationDirectory(const QString &mp4LocationDirectory)
 {
-	m_mp4Location = mp4Location;
-	m_hasEncoded = QFile::exists(mp4Location);
+	m_mp4Locations.clear();
+	QDir().mkpath(mp4LocationDirectory);
+	foreach (EncodeTarget target, EncodeTarget::targets()) {
+		m_mp4Locations.append(QString("%1/%2%3").arg(mp4LocationDirectory, m_title, target.suffix()));
+	}
+	setEncoded(m_mp4Locations.length() != 1);
 }
 bool Movie::hasEncoded() const
 {
@@ -102,7 +100,9 @@ bool Movie::hasEncoded() const
 }
 void Movie::setEncoded(bool encoded)
 {
-	m_hasEncoded = encoded && QFile::exists(m_mp4Location);
+	m_hasEncoded = encoded;
+	foreach (QString mp4Location, m_mp4Locations)
+		m_hasEncoded &= QFile::exists(mp4Location);
 	if (m_hasEncoded)
 		emit statusChanged();
 }

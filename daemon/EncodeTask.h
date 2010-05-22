@@ -2,8 +2,10 @@
 #define ENCODETASK_H
 
 #include "Task.h"
+#include "EncodeTarget.h"
 #include <QProcess>
 #include <QTime>
+#include <QList>
 
 class EncodeTask : public Task
 {
@@ -16,8 +18,11 @@ public:
 protected:
 	bool executeTask(Movie *movie);
 private:
+	void encode(EncodeTarget target);
+	void queueNext();
 	QProcess *m_process;
 	QString m_status;
+	QList<int> m_tasks;
 private slots:
 	void finished(int exitCode, QProcess::ExitStatus exitStats);
 	void readyRead();

@@ -1,9 +1,9 @@
 #include "UploadTask.h"
 #include <QDebug>
 
-UploadTask::UploadTask(QObject *parent) : Task(false, parent)
+UploadTask::UploadTask(QObject *parent) : Task(false, parent),
+	m_ftp(this)
 {
-	qDebug() << "STUB: UploadTask constructor";
 }
 UploadTask::~UploadTask()
 {
@@ -12,8 +12,8 @@ UploadTask::~UploadTask()
 }
 bool UploadTask::executeTask(Movie *movie)
 {
-	Q_UNUSED(movie)
-	qDebug() << "STUB: UploadTask::executeTask()";
+	m_ftp.connectToHost("62.219.1.20");
+	m_ftp.login("title_loader", "clip0l0gy");
 	movie->setUploaded(true);
 	setCompleted(true);
 	return true;
