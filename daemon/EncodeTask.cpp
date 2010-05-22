@@ -4,6 +4,7 @@
 #include <QTime>
 #include <QFile>
 #include <QDebug>
+#include <QCoreApplication>
 
 EncodeTask::EncodeTask(QObject *parent) : Task(false, parent),
 	m_process(0)
@@ -48,7 +49,7 @@ bool EncodeTask::executeTask(Movie *movie)
 	qDebug() << "starting handbreak with arguments:" << arguments;
 	//m_process->setStandardErrorFile("/home/zx2c4/Desktop/error.log");
 	//m_process->setStandardOutputFile("/home/zx2c4/Desktop/out.log");
-	m_process->start(QLatin1String("./HandBrakeCLI"), arguments, QIODevice::ReadOnly);
+	m_process->start(QString("%1/HandBrakeCLI").arg(QCoreApplication::applicationDirPath()), arguments, QIODevice::ReadOnly);
 	return true;
 }
 bool EncodeTask::canRunTask(const Movie *movie) const

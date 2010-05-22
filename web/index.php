@@ -32,7 +32,6 @@ $loader = new AnyLoader();
 echo "<table border=1>";
 echo "<tr><th>Rip Status:</th><td>";
 $ripStatus = $loader->ripStatus();
-print_r($ripStatus);
 if ($ripStatus === false)
 	echo "(idle)";
 else

@@ -38,44 +38,43 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 	}
+	Listener listener;
+	if (!listener.start(QHostAddress(hostAddress), port)) {
+		std::cerr << "Could not bind." << std::endl;
+		return 1;
+	}
 	if (!pidFile.isEmpty()) {
 		pid_t pid, sid;
 		pid = fork();
 		if (pid < 0)
-			return 1;
+			_exit(1);
 		else if (pid > 0) {
 			std::ofstream pidfile;
 			pidfile.open(pidFile.toAscii());
 			pidfile << QString::number(pid).toStdString() << std::endl;
 			pidfile.close();
-			return 0;
+			_exit(0);
 		}
 		if (!userName.isEmpty()) {
 			struct passwd *pw;
 			if (!(pw = getpwnam(userName.toAscii()))) {
 				std::cerr << "Couldnt find username." << std::endl;
-				return 1;
+				_exit(1);
 			}
 			if (setgid(pw->pw_gid) || setuid(pw->pw_uid)) {
 				std::cerr << "Couldn't set gid or uid." << std::endl;
-				return 1;
+				_exit(1);
 			}
 		}
 		umask(0);
 		sid = setsid();
 		if (sid < 0)
-			return 1;
+			_exit(1);
 		if ((chdir("/")) < 0)
-			return 0;
-		//HACK: Why do I have to comment this line? Why does it not bind when there's no stdin?
-		//close(STDIN_FILENO);
+			_exit(1);
+		close(STDIN_FILENO);
 		close(STDOUT_FILENO);
 		close(STDERR_FILENO);
-	}
-	Listener listener;
-	if (!listener.start(QHostAddress(hostAddress), port)) {
-		std::cerr << "Could not bind." << std::endl;
-		return 1;
 	}
 	return a.exec();
 }
