@@ -16,15 +16,16 @@ class Controller : public QObject
 	Q_OBJECT
 public:
 	Controller(QObject *parent = 0);
-	void addMovie(Movie *movie);
+	bool addMovie(Movie *movie);
 	Movie* movieForTitle(const QString &title);
 	Movie* addISO(const QString &fileName);
+	QLinkedList<Movie*> addRecursiveISOs(const QString &dirName);
 	QLinkedList<Movie*> movies() const;
 #ifdef ENABLE_RIPPING
-	const RipTask* ripTask() const;
+	RipTask* ripTask() const;
 #endif
-	const EncodeTask* encodeTask() const;
-	const UploadTask* uploadTask() const;
+	EncodeTask* encodeTask() const;
+	UploadTask* uploadTask() const;
 
 private:
 	QLinkedList<Movie*> m_movies;

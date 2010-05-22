@@ -16,14 +16,29 @@ getTitles
 addISO|FILE_NAME
 	Adds ISO to queue and names it using standard transformation. Returns generated MOVIE_TITLE.
 
+addRecursiveISOs|DIRECTORY_NAME
+	Recursively searchs DIRECTORY_NAME for ISOs and adds them. Returns generated MOVIE_TITLEs.
+
 setVideoTrack|MOVIE_TITLE|TRACK_NUMBER
 	Sets video track of MOVIE_TITLE to TRACK_NUMBER. Returns 'success'.
 
+setAudioTracks|MOVIE_TITLE|TRACK_NUMBER 1|TRACK_NUMBER 2|TRACK_NUMBER 3|...|TRACK_NUMBER N   or setAudioTracks|MOVIE_TITLE|auto
+	Sets audio tracks of MOVIE_TITLE to either TRACK_NUMBER 1-N or to auto. Returns 'success'.
+
 ripStatus
-	Returns string of rip status or 'not running'.
+	Returns string of rip status.
 
 encodeStatus
-	Returns string of encode status 'not running'.
+	Returns string of encode status.
 
 uploadStatus
-	Returns string up upload status 'not running'.
+	Returns string up upload status.
+
+terminateRip
+	Terminates rip and returns 'success'.
+
+terminateEncode
+	Terminates encode and returns 'success'.
+
+terminateUpload
+	Terminates upload and returns 'success'.

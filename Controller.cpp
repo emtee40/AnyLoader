@@ -1,6 +1,7 @@
 #include "Controller.h"
 #include <QDir>
 #include <QFileInfo>
+#include <QDirIterator>
 
 Controller::Controller(QObject *parent) : QObject(parent),
 #ifdef ENABLE_RIPPING
@@ -26,19 +27,40 @@ void Controller::runTasks(Movie *movie)
 	if (!m_uploadTask.isRunning() && m_uploadTask.canRunTask(movie))
 		m_uploadTask.runTask(movie);
 }
-void Controller::addMovie(Movie *movie)
+bool Controller::addMovie(Movie *movie)
 {
+	foreach (Movie *existing, m_movies) {
+		if (existing->title() == movie->title()) {
+			delete movie;
+			return false;
+		}
+	}
 	connect(movie, SIGNAL(statusChanged()), this, SLOT(runTasks()));
 	m_movies.append(movie);
 	movie->setParent(this);
 	runTasks(movie);
+	return true;
 }
 Movie* Controller::addISO(const QString &fileName)
 {
 	Movie *movie = new Movie(Movie::titleFromISOName(QFileInfo(fileName).baseName()), fileName, this);
-	addMovie(movie);
-	return movie;
+	if (addMovie(movie))
+		return movie;
+	else
+		return 0;
 }
+QLinkedList<Movie*> Controller::addRecursiveISOs(const QString &dirName)
+{
+	QLinkedList<Movie*> movies;
+	QDirIterator dir(dirName, QStringList() << "*.iso" << "*.ISO", QDir::Files | QDir::Readable, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
+	while (dir.hasNext()) {
+		Movie *next = addISO(dir.next());
+		if (next)
+			movies << next;
+	}
+	return movies;
+}
+
 Movie* Controller::movieForTitle(const QString &title)
 {
 	foreach(Movie* movie, m_movies)
@@ -51,16 +73,16 @@ QLinkedList<Movie*> Controller::movies() const
 	return m_movies;
 }
 #ifdef ENABLE_RIPPING
-const RipTask* Controller::ripTask() const
+RipTask* Controller::ripTask() const
 {
-	return &m_ripTask;
+	return const_cast<RipTask*>(&m_ripTask);
 }
 #endif
-const EncodeTask* Controller::encodeTask() const
+EncodeTask* Controller::encodeTask() const
 {
-	return &m_encodeTask;
+	return const_cast<EncodeTask*>(&m_encodeTask);
 }
-const UploadTask* Controller::uploadTask() const
+UploadTask* Controller::uploadTask() const
 {
-	return &m_uploadTask;
+	return const_cast<UploadTask*>(&m_uploadTask);
 }
