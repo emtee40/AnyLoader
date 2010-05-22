@@ -34,9 +34,10 @@ ripping {
 OTHER_FILES += ../Protocol.txt
 
 QMAKE_STRIP = echo
-mainfiles.path = /usr/local/bin
-mainfiles.files = ./anyloader ./HandBrakeCLI
+handbrake.path = /usr/local/bin
+handbrake.files = ./HandBrakeCLI
 init.path = /etc/init.d
 init.files = ./init.d/anyloader
-INSTALLS = mainfiles init
+target.path = /usr/local/bin
+INSTALLS += handbrake init target
 
