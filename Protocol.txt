@@ -5,17 +5,17 @@ followed by \n.
 Commands:
 
 * getTitleInformation|MOVIE_TITLE
-    Print-out from handbrake showing track/chapter/audio break-down.
+    Returns print-out from handbrake showing track/chapter/audio break-down.
 getTitles
-    List of titles as:
+    Returns list of titles as:
 	MOVIE_TITLE|HAS_RIPPED 1/0|HAS_ENCODED 1/0|HAS_UPLOADED 1/0|VIDEO_TRACK|AUDIO_TRACKS (seperated by , or 'auto')
 addISO|FILE_NAME
-    Adds ISO to queue and names it using standard transformation.
+    Adds ISO to queue and names it using standard transformation. Returns generated MOVIE_TITLE.
 setVideoTrack|MOVIE_TITLE|TRACK_NUMBER
-    Sets video track of MOVIE_TITLE to TRACK_NUMBER.
+    Sets video track of MOVIE_TITLE to TRACK_NUMBER. Returns success.
 ripStatus
-    String of rip status.
+    Returns string of rip status or 'not running'.
 encodeStatus
-    String of encode status.
+    Returns string of encode status 'not running'.
 uploadStatus
-    String up upload status.
+    Returns string up upload status 'not running'.
