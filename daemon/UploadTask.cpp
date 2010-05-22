@@ -1,6 +1,7 @@
 #include "UploadTask.h"
 #include <QDebug>
 #include <QFile>
+#include <EncodeTarget.h>
 
 UploadTask::UploadTask(QObject *parent) : Task(false, parent),
 	m_ftp(this),
@@ -74,5 +75,5 @@ QString UploadTask::status() const
 }
 void UploadTask::storeUploadProgress(qint64 done, qint64 total)
 {
-	m_status = QString("%1%%: %2 of %3 transferred").arg(QString::number((double)done / (double)total, 'g', 2), QString::number(done), QString::number(total));
+	m_status = QString("%4 - %1%%: %2 of %3 transferred").arg(QString::number((double)done / (double)total, 'g', 2), QString::number(done), QString::number(total), EncodeTarget::targets().at(m_currentFileIndex).name());
 }
