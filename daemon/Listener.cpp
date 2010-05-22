@@ -37,6 +37,10 @@ void Listener::readyRead()
 			}
 			streamer << TitleInformation::readTitles(movie->isoLocation()) << endl;
 		} else if (call.at(0) == "getTitles") {
+			if (m_controller.movies().count() == 0) {
+				streamer << "error" << endl;
+				continue;
+			}
 			foreach (Movie *movie, m_controller.movies()) {
 				QString audioTracks = "auto";
 				if (movie->audioTracks()->length() > 0) {
@@ -57,8 +61,15 @@ void Listener::readyRead()
 			movie = m_controller.addISO(call.at(1));
 			if (movie)
 				streamer << movie->title() << endl;
+			else
+				streamer << "error" << endl;
 		} else if (call.at(0) == "addRecursiveISOs" && call.length() == 2) {
-			foreach(movie, m_controller.addRecursiveISOs(call.at(1)))
+			QLinkedList<Movie*> movies = m_controller.addRecursiveISOs(call.at(1));
+			if (movies.count() == 0) {
+				streamer << "error" << endl;
+				continue;
+			}
+			foreach(movie, movies)
 				streamer << movie->title() << endl;
 		} else if (call.at(0) == "setVideoTrack" && call.length() == 3) {
 			movie = m_controller.movieForTitle(call.at(1));
