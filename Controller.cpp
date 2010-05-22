@@ -29,5 +29,6 @@ void Controller::addMovie(Movie *movie)
 {
 	connect(movie, SIGNAL(statusChanged()), this, SLOT(runTasks()));
 	m_movies.append(movie);
+	movie->setParent(this);
 	runTasks(movie);
 }

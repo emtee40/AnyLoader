@@ -13,12 +13,14 @@ SOURCES += main.cpp \
     Task.cpp \
     EncodeTask.cpp \
     UploadTask.cpp \
-    Controller.cpp
+    Controller.cpp \
+    TitleInformation.cpp
 HEADERS += Movie.h \
     Task.h \
     EncodeTask.h \
     UploadTask.h \
-    Controller.h
+    Controller.h \
+    TitleInformation.h
 ripping { 
     QT += dbus
     LIBS += -ldvdcss \

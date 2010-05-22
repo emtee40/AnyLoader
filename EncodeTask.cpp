@@ -34,8 +34,16 @@ bool EncodeTask::executeTask(Movie *movie)
 	arguments << "-6" << "stereo";
 	arguments << "-N" << "eng" << "--native-dub";
 	arguments << "-f" << "mp4";
-	arguments << "--dvdnav" << "-t" << QString::number(movie->videoTrack());
-	//TODO: audioTracks
+	arguments << "-t" << QString::number(movie->videoTrack());
+	if (!movie->audioTracks()->length()) {
+		QString audioTracks;
+		for (int i = 0; i < movie->audioTracks()->length(); ++i) {
+			if (!audioTracks.isEmpty())
+				audioTracks += ",";
+			audioTracks += QString::number(movie->audioTracks()->at(i));
+		}
+		arguments << "-a" << audioTracks;
+	}
 	arguments << "--loose-anamorphic" << "--modulus" << "16";
 	arguments << "--optimize" << "--decomb" << "--deblock" << "--denoise=\"weak\"";
 	arguments << "-x" << "ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:subme=9:analyse=all:8x8dct:trellis=1:no-fast-pskip:psy-rd=1,1";
@@ -47,7 +55,7 @@ bool EncodeTask::executeTask(Movie *movie)
 }
 bool EncodeTask::canRunTask(const Movie *movie) const
 {
-	return movie->hasRipped() && !movie->hasEncoded() && !movie->hasUploaded();
+	return movie->hasRipped() && !movie->hasEncoded() && !movie->hasUploaded() && movie->videoTrack() != 0;
 }
 
 void EncodeTask::readyRead()

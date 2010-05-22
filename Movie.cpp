@@ -93,12 +93,12 @@ void Movie::setMp4Location(const QString &mp4Location)
 bool Movie::hasEncoded() const
 {
 	return m_hasEncoded;
-	if (m_hasEncoded)
-		emit statusChanged();
 }
 void Movie::setEncoded(bool encoded)
 {
 	m_hasEncoded = encoded && QFile::exists(m_mp4Location);
+	if (m_hasEncoded)
+		emit statusChanged();
 }
 bool Movie::hasUploaded() const
 {
