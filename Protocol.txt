@@ -1,23 +1,29 @@
 Each command is:
-    FUNCTIONNAME|Arg1|Arg2|Arg3|...|ArgN
+	FUNCTIONNAME|Arg1|Arg2|Arg3|...|ArgN
 followed by \n.
 
 'error' is returned on error.
 
 Commands:
 
-* getTitleInformation|MOVIE_TITLE
-    Returns print-out from handbrake showing track/chapter/audio break-down.
+getTitleInformation|MOVIE_TITLE
+	Returns print-out from handbrake showing track/chapter/audio break-down.
+
 getTitles
-    Returns list of titles as:
-	MOVIE_TITLE|HAS_RIPPED 1/0|HAS_ENCODED 1/0|HAS_UPLOADED 1/0|VIDEO_TRACK|AUDIO_TRACKS (seperated by , or 'auto')
+	Returns list of titles as:
+		MOVIE_TITLE|HAS_RIPPED 1/0|HAS_ENCODED 1/0|HAS_UPLOADED 1/0|VIDEO_TRACK|AUDIO_TRACKS (seperated by , or 'auto')
+
 addISO|FILE_NAME
-    Adds ISO to queue and names it using standard transformation. Returns generated MOVIE_TITLE.
+	Adds ISO to queue and names it using standard transformation. Returns generated MOVIE_TITLE.
+
 setVideoTrack|MOVIE_TITLE|TRACK_NUMBER
-    Sets video track of MOVIE_TITLE to TRACK_NUMBER. Returns 'success'.
+	Sets video track of MOVIE_TITLE to TRACK_NUMBER. Returns 'success'.
+
 ripStatus
-    Returns string of rip status or 'not running'.
+	Returns string of rip status or 'not running'.
+
 encodeStatus
-    Returns string of encode status 'not running'.
+	Returns string of encode status 'not running'.
+
 uploadStatus
-    Returns string up upload status 'not running'.
+	Returns string up upload status 'not running'.
