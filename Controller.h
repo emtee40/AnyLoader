@@ -15,6 +15,7 @@ class Controller : public QObject
 	Q_OBJECT
 public:
 	Controller(QObject *parent = 0);
+	void addMovie(Movie *movie);
 private:
 	QLinkedList<Movie*> m_movies;
 #ifdef ENABLE_RIPPING
@@ -24,7 +25,6 @@ private:
 	UploadTask m_uploadTask;
 
 	void runTasks(Movie *movie);
-	void addMovie(Movie *movie);
 
 private slots:
 	void runTasks();

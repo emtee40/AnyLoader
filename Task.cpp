@@ -8,7 +8,7 @@ Task::Task(bool threaded, QObject *parent) : QObject(parent),
 	if (threaded) {
 		m_watcher = new QFutureWatcher<bool>;
 		m_watcher->setParent(this);
-		connect(m_watcher, SIGNAL(finished()), this, SLOT(jobFinished()));
+		connect(m_watcher, SIGNAL(finished()), this, SLOT(finished()));
 	} else
 		m_watcher = 0;
 }

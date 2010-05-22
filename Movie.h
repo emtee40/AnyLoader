@@ -10,7 +10,9 @@ class Movie : public QObject
 	Q_OBJECT
 
 public:
+#ifdef ENABLE_RIPPING
 	Movie(const QString &title, QObject *parent = 0);
+#endif
 	Movie(const QString &title, const QString &isoLocation, QObject *parent = 0);
 	Movie(const QString &title, const QString &isoLocation, const QString &mp4Location, QObject *parent = 0);
 
@@ -33,6 +35,9 @@ public:
 	quint8 videoTrack() const;
 	void setVideoTrack(quint8 videoTrack);
 	QList<quint8>* audioTracks();
+
+	static QString fileNameFromTitle(const QString &title, const QString &type, const QString &extension);
+	static QString titleFromISOName(const QString &isoName);
 
 private:
 	QString m_title;

@@ -1,4 +1,5 @@
 #include "Controller.h"
+#include <QDir>
 
 Controller::Controller(QObject *parent) : QObject(parent),
 #ifdef ENABLE_RIPPING

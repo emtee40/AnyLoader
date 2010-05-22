@@ -1,17 +1,24 @@
 #include "Movie.h"
+#include <QDir>
 #include <QFile>
+#include <QCoreApplication>
 
+#ifdef ENABLE_RIPPING
 Movie::Movie(const QString &title, QObject *parent) : QObject(parent),
 		m_title(title),
+		m_isoLocation(fileNameFromTitle(title, QLatin1String("Image"), QLatin1String("iso"))),
+		m_mp4Location(fileNameFromTitle(title, QLatin1String("Encode"), QLatin1String("mp4"))),
 		m_videoTrack(0),
 		m_hasRipped(false),
 		m_hasEncoded(false),
 		m_hasUploaded(false)
 {
 }
+#endif
 Movie::Movie(const QString &title, const QString &isoLocation, QObject *parent) : QObject(parent),
 		m_title(title),
 		m_isoLocation(isoLocation),
+		m_mp4Location(fileNameFromTitle(title, QLatin1String("Encode"), QLatin1String("mp4"))),
 		m_videoTrack(0),
 		m_hasRipped(QFile::exists(isoLocation)),
 		m_hasEncoded(false),
@@ -27,6 +34,24 @@ Movie::Movie(const QString &title, const QString &isoLocation, const QString &mp
 		m_hasEncoded(QFile::exists(mp4Location)),
 		m_hasUploaded(false)
 {
+}
+
+
+QString Movie::fileNameFromTitle(const QString &title, const QString &type, const QString &extension)
+{
+	QString directory = QString("%1/%2/%3").arg(QDir::homePath(), QCoreApplication::applicationName(), title);
+	QDir().mkpath(directory);
+	return QString("%1/%2 - %3.%4").arg(directory, type, title, extension);
+}
+QString Movie::titleFromISOName(const QString &isoName)
+{
+	QString name = QString(isoName).replace(QLatin1Char('_'), QLatin1Char(' ')).toLower();
+	int i = 0;
+	do {
+		name[i] = name[i].toUpper();
+		i = name.indexOf(QLatin1Char(' '), i) + 1;
+	} while (i);
+	return name;
 }
 
 QString Movie::title() const
