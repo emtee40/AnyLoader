@@ -72,8 +72,10 @@ bool Controller::removeMovie(Movie *movie)
 {
 	if (!m_movies.removeOne(movie))
 		return false;
+#ifdef ENABLE_RIPPING
 	if (m_ripTask.currentMovie() == movie)
 		m_ripTask.terminate();
+#endif
 	if (m_encodeTask.currentMovie() == movie)
 		m_encodeTask.terminate();
 	if (m_uploadTask.currentMovie() == movie)

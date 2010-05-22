@@ -1,4 +1,4 @@
-CONFIG += ripping
+#CONFIG += ripping
 QT += network
 QT -= gui
 TARGET = AnyLoader
