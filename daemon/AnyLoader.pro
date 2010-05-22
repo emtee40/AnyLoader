@@ -1,7 +1,7 @@
 #CONFIG += ripping
 QT += network
 QT -= gui
-TARGET = AnyLoader
+TARGET = anyloader
 CONFIG += console
 CONFIG -= app_bundle
 TEMPLATE = app
@@ -30,4 +30,13 @@ ripping {
     SOURCES += RipTask.cpp \
 	DVDDrive.cpp
 }
+
 OTHER_FILES += ../Protocol.txt
+
+QMAKE_STRIP = echo
+mainfiles.path = /usr/local/bin
+mainfiles.files = ./anyloader ./HandBrakeCLI
+init.path = /etc/init.d
+init.files = ./init.d/anyloader
+INSTALLS = mainfiles init
+
