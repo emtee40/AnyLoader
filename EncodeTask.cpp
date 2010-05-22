@@ -97,7 +97,7 @@ void EncodeTask::kill()
 void EncodeTask::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
 	if (!m_process) return;
-	if (exitCode == 0 && exitStatus == QProcess::NormalExit) {
+	if (exitCode == 0 && exitStatus == QProcess::NormalExit && QFile::exists(m_movie->mp4Location())) {
 		disconnect(m_process, 0, 0, 0);
 		m_process->terminate();
 		m_process->deleteLater();
