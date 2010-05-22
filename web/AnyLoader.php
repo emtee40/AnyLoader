@@ -87,5 +87,8 @@ class AnyLoader {
 	public function startTerminatedTasks() {
 		return $this->request("startTerminatedTasks");
 	}
+	public function removeMovie($movieTitle) {
+		return $this->request("removeMovie", $movieTitle);
+	}
 }
 ?>

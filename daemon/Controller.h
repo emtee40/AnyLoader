@@ -19,6 +19,7 @@ public:
 	bool addMovie(Movie *movie);
 	Movie* movieForTitle(const QString &title);
 	Movie* addISO(const QString &fileName);
+	bool removeMovie(Movie *movie);
 	QLinkedList<Movie*> addRecursiveISOs(const QString &dirName);
 	QLinkedList<Movie*> movies() const;
 #ifdef ENABLE_RIPPING

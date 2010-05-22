@@ -137,6 +137,16 @@ void Listener::readyRead()
 		} else if (call.at(0) == "startTerminatedTasks") {
 			m_controller.runTasks();
 			streamer << "success" << endl;
+		} else if (call.at(0) == "removeMovie" && call.length() == 2) {
+			movie = m_controller.movieForTitle(call.at(1));
+			if (!movie) {
+				streamer << "error" << endl;
+				continue;
+			}
+			if (m_controller.removeMovie(movie))
+				streamer << "success" << endl;
+			else
+				streamer << "error" << endl;
 		} else {
 			streamer << "error" << endl;
 		}

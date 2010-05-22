@@ -68,6 +68,20 @@ Movie* Controller::movieForTitle(const QString &title)
 			return movie;
 	return 0;
 }
+bool Controller::removeMovie(Movie *movie)
+{
+	if (!m_movies.removeOne(movie))
+		return false;
+	if (m_ripTask.currentMovie() == movie)
+		m_ripTask.terminate();
+	if (m_encodeTask.currentMovie() == movie)
+		m_encodeTask.terminate();
+	if (m_uploadTask.currentMovie() == movie)
+		m_uploadTask.terminate();
+	runTasks();
+	return true;
+}
+
 QLinkedList<Movie*> Controller::movies() const
 {
 	return m_movies;

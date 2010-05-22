@@ -49,3 +49,6 @@ terminateUpload
 
 startTerminatedTasks
 	Starts tasks that were previously terminated.
+
+removeMovie MOVIE_TITLE
+ 	Removes MOVIE_TITLE from queue and kills any currently running tasks on it.
