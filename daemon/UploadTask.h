@@ -3,6 +3,7 @@
 
 #include "Task.h"
 #include <QFtp>
+class QFile;
 
 class UploadTask : public Task
 {
@@ -18,7 +19,19 @@ protected:
 	void kill();
 
 private:
+	void queueNext();
 	QFtp m_ftp;
+	int m_currentFileIndex;
+	QString m_status;
+	int m_fileUpload;
+	QFile *m_currentFile;
+
+private slots:
+	void storeUploadProgress(qint64 done, qint64 total);
+	void commandFinished(int id, bool error);
+
+signals:
+	void uploadProgress(qint64 done, qint64 total);
 
 };
 
