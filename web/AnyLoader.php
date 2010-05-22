@@ -64,7 +64,7 @@ class AnyLoader {
 		return $this->request("setVideoTrack", $movieTitle, $videoTrack);
 	}
 	public function setAudioTracks($movieTitle, $audioTracks) {
-		return $this->request("setAudioTracks", $movieTitle, implode(",", $audioTracks));
+		return $this->request("setAudioTracks", $movieTitle, implode("|", $audioTracks));
 	}
 	public function ripStatus() {
 		return $this->request("ripStatus");
