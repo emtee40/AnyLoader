@@ -10,6 +10,7 @@ public:
 	UploadTask(QObject *parent = 0);
 	~UploadTask();
 	bool canRunTask(const Movie *movie) const;
+	QString status() const;
 
 protected:
 	bool executeTask(Movie *movie);

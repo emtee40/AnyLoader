@@ -20,6 +20,11 @@ public:
 	Movie* movieForTitle(const QString &title);
 	Movie* addISO(const QString &fileName);
 	QLinkedList<Movie*> movies() const;
+#ifdef ENABLE_RIPPING
+	const RipTask* ripTask() const;
+#endif
+	const EncodeTask* encodeTask() const;
+	const UploadTask* uploadTask() const;
 
 private:
 	QLinkedList<Movie*> m_movies;

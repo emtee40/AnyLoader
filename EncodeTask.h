@@ -12,15 +12,15 @@ public:
 	EncodeTask(QObject *parent = 0);
 	~EncodeTask();
 	bool canRunTask(const Movie *movie) const;
+	QString status() const;
 protected:
 	bool executeTask(Movie *movie);
 private:
 	QProcess *m_process;
-	Movie *m_movie;
+	QString m_status;
 private slots:
 	void finished(int exitCode, QProcess::ExitStatus exitStats);
 	void readyRead();
-	void error();
 public slots:
 	void kill();
 signals:

@@ -12,6 +12,8 @@ public:
 	void runTask(Movie *movie);
 	virtual bool canRunTask(const Movie *movie) const = 0;
 	bool isRunning() const;
+	virtual QString status() const = 0;
+	Movie* currentMovie() const;
 
 protected:
 	Task(bool threaded, QObject *parent = 0);
@@ -22,6 +24,7 @@ protected:
 private:
 	QFutureWatcher<bool> *m_watcher;
 	bool m_isRunning;
+	Movie* m_currentMovie;
 
 private slots:
 	void finished();

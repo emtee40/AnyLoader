@@ -6,8 +6,7 @@
 #include <QDebug>
 
 EncodeTask::EncodeTask(QObject *parent) : Task(false, parent),
-	m_process(0),
-	m_movie(0)
+	m_process(0)
 {
 }
 EncodeTask::~EncodeTask()
@@ -17,9 +16,8 @@ EncodeTask::~EncodeTask()
 }
 bool EncodeTask::executeTask(Movie *movie)
 {
-	m_movie = movie;
 	m_process = new QProcess(this);
-	connect(m_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(error()));
+	connect(m_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(terminate()));
 	connect(m_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
 	connect(m_process, SIGNAL(readyRead()), this, SLOT(readyRead()));
 	QStringList arguments;
@@ -65,6 +63,7 @@ void EncodeTask::readyRead()
 	QByteArray byteLine;
 	while (!(byteLine = m_process->readLine()).isEmpty()) {
 		QString line = QString(byteLine).trimmed();
+		m_status = line;
 		if (percentLinePattern.exactMatch(line)) {
 			int currentTask = percentLinePattern.cap(1).toInt();
 			int totalTasks = percentLinePattern.cap(2).toInt();
@@ -83,34 +82,33 @@ void EncodeTask::readyRead()
 }
 void EncodeTask::kill()
 {
+	m_status.clear();
 	if (m_process) {
 		disconnect(m_process, 0, 0, 0);
 		m_process->terminate();
 		m_process->deleteLater();
 		m_process = 0;
 	}
-	if (m_movie) {
-		QFile::remove(m_movie->mp4Location());
-		m_movie = 0;
+	if (currentMovie()) {
+		QFile::remove(currentMovie()->mp4Location());
 	}
 }
 void EncodeTask::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
+	m_status.clear();
 	if (!m_process) return;
-	if (exitCode == 0 && exitStatus == QProcess::NormalExit && QFile::exists(m_movie->mp4Location())) {
+	if (exitCode == 0 && exitStatus == QProcess::NormalExit && QFile::exists(currentMovie()->mp4Location())) {
 		disconnect(m_process, 0, 0, 0);
 		m_process->terminate();
 		m_process->deleteLater();
 		m_process = 0;
-		m_movie->setEncoded(true);
-		m_movie = 0;
+		currentMovie()->setEncoded(true);
 		setCompleted(true);
 	}
 	else
 		terminate();
 }
-void EncodeTask::error()
+QString EncodeTask::status() const
 {
-	kill();
-	setCompleted(false);
+	return m_status;
 }

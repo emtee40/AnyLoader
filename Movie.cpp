@@ -123,6 +123,8 @@ quint8 Movie::videoTrack() const
 void Movie::setVideoTrack(quint8 videoTrack)
 {
 	m_videoTrack = videoTrack;
+	if (m_videoTrack)
+		emit statusChanged();
 }
 QList<quint8>* Movie::audioTracks()
 {

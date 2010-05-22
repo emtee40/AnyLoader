@@ -36,6 +36,7 @@ int RipTask::cmpvob(const void *p1, const void *p2)
 bool RipTask::executeTask(Movie *movie)
 {
 	m_locker.lockForWrite();
+	m_status.clear();
 	m_terminate = false;
 	m_locker.unlock();
 	bool ret = saveImageToPath(movie->isoLocation());
@@ -175,6 +176,7 @@ bool RipTask::saveImageToDevice(QIODevice &out)
 		//	   (long long)blkno*DVDCSS_BLOCK_SIZE, (long long)discend*DVDCSS_BLOCK_SIZE);
 		//fflush(stdout);
 		emit extractProgress(blkno, discend);
+		m_status = QString("%s of %s").arg(QString::number(blkno), QString::number(discend));
 
 		int maxblks;
 		int cssflags;
@@ -233,6 +235,7 @@ bool RipTask::saveImageToDevice(QIODevice &out)
 			break;
 	}
 	emit extractProgress(blkno, discend);
+	m_status = QString("%s of %s").arg(QString::number(blkno), QString::number(discend));
 
 	if (blkno < (int)discend) {
 		qDebug() << "SHORT READ: only " << blkno << "of" << discend << "blocks copied";
@@ -240,6 +243,7 @@ bool RipTask::saveImageToDevice(QIODevice &out)
 	}
 
 	qDebug() << "Success:" << blkno << "blocks copied (" << (long long)blkno * DVDCSS_BLOCK_SIZE << ") of" << discend << "expected";
+	m_status.clear();
 	return true;
 }
 void RipTask::kill()
@@ -247,5 +251,9 @@ void RipTask::kill()
 	m_locker.lockForWrite();
 	m_terminate = true;
 	m_locker.unlock();
+}
+QString RipTask::status() const
+{
+	return m_status;
 }
 

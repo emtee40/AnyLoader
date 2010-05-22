@@ -3,7 +3,8 @@
 #include <QDebug>
 
 Task::Task(bool threaded, QObject *parent) : QObject(parent),
-	m_isRunning(false)
+	m_isRunning(false),
+	m_currentMovie(0)
 {
 	if (threaded) {
 		m_watcher = new QFutureWatcher<bool>;
@@ -19,6 +20,7 @@ void Task::runTask(Movie *movie)
 		return;
 	}
 	m_isRunning = true;
+	m_currentMovie = movie;
 	if (m_watcher)
 		m_watcher->setFuture(QtConcurrent::run(this, &Task::executeTask, movie));
 	else
@@ -37,9 +39,14 @@ void Task::terminate()
 void Task::setCompleted(bool result)
 {
 	m_isRunning = false;
+	m_currentMovie = 0;
 	emit completed(result);
 }
 bool Task::isRunning() const
 {
 	return m_isRunning;
+}
+Movie* Task::currentMovie() const
+{
+	return m_currentMovie;
 }

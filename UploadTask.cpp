@@ -26,3 +26,7 @@ void UploadTask::kill()
 {
 	qDebug() << "STUB: UploadTask::kill()";
 }
+QString UploadTask::status() const
+{
+	return QString();
+}

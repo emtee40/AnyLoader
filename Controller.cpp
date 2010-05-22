@@ -50,4 +50,17 @@ QLinkedList<Movie*> Controller::movies() const
 {
 	return m_movies;
 }
-
+#ifdef ENABLE_RIPPING
+const RipTask* Controller::ripTask() const
+{
+	return &m_ripTask;
+}
+#endif
+const EncodeTask* Controller::encodeTask() const
+{
+	return &m_encodeTask;
+}
+const UploadTask* Controller::uploadTask() const
+{
+	return &m_uploadTask;
+}

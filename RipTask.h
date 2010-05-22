@@ -14,6 +14,7 @@ public:
 	bool saveImageToDevice(QIODevice &out);
 	bool saveImageToPath(const QString &path);
 	bool canRunTask(const Movie *movie) const;
+	QString status() const;
 public slots:
 	void kill();
 private:
@@ -23,6 +24,7 @@ private:
 	} vobfile;
 	QReadWriteLock m_locker;
 	bool m_terminate;
+	QString m_status;
 protected:
 	bool executeTask(Movie *movie);
 signals:
