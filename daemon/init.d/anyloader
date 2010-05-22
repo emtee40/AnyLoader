@@ -1,0 +1,16 @@
+#!/sbin/runscript
+
+PIDFILE=/var/run/anyloader
+USER=anyloader
+
+start() {
+        ebegin "Starting AnyLoader"
+        start-stop-daemon --start --exec /usr/local/bin/anyloader --pidfile ${PIDFILE} -- -b ${PIDFILE} -u ${USER}
+        eend $?
+}
+
+stop() {
+        ebegin "Stopping AnyLoader"
+        start-stop-daemon --stop --pidfile ${PIDFILE}
+        eend $?
+}
