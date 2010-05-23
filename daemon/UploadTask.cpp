@@ -77,5 +77,5 @@ QString UploadTask::status() const
 }
 void UploadTask::storeUploadProgress(qint64 done, qint64 total)
 {
-	m_status = QString("%4 - %1%: %2 of %3 transferred").arg(QString::number((double)done / (double)total, 'g', 2), QString::number(done), QString::number(total), EncodeTarget::targets().at(m_currentFileIndex).name());
+	m_status = QString("%4 - %1%: %2 of %3 transferred").arg(QString::number(100.0 * (double)done / (double)total, 'g', 2), QString::number(done), QString::number(total), EncodeTarget::targets().at(m_currentFileIndex).name());
 }
