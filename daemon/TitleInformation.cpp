@@ -2,9 +2,16 @@
 #include <QStringList>
 #include <QProcess>
 #include <QCoreApplication>
+#include <QFileInfo>
+#include <QDate>
+#include <QHash>
 
 QString TitleInformation::readTitles(const QString &location)
 {
+	static QHash<QString, QString> cache;
+	QString cacheKey(QFileInfo(location).lastModified().toString().append(location));
+	if (cache.contains(cacheKey))
+		return cache.value(cacheKey);
 	QProcess process;
 	QStringList arguments;
 	arguments << "-i" << location;
@@ -18,7 +25,9 @@ QString TitleInformation::readTitles(const QString &location)
 			if (trim.length() > 0 && trim.at(0) == '+')
 				output.append(line);
 		}
-		return output.join(QLatin1String("\n"));
+		QString out = output.join(QLatin1String("\n"));
+		cache.insert(cacheKey, out);
+		return out;
 	}
 	return QString();
 }
