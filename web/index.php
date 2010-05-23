@@ -63,7 +63,7 @@ foreach ($loader->getTitles() as $title) {
 	if ($title->videoTrack == 0)
 		echo "(not yet selected)";
 	else
-		echo "Title ".$title->videoTrack;
+		echo "Video Title ".$title->videoTrack;
 	if (!$title->hasEncoded && $encodeStatus[0] != $title->title) {
 		echo "</a>";
 		if ($title->videoTrack != 0)
@@ -75,7 +75,7 @@ foreach ($loader->getTitles() as $title) {
 	if ($title->audioTrack == 0)
 		echo "(not yet selected)";
 	else
-		echo "Track ".$title->audioTrack;
+		echo "Audio Track ".$title->audioTrack;
 	if (!$title->hasEncoded && $encodeStatus[0] != $title->title)
 		echo "</a>";
 	echo "</td></tr>";
