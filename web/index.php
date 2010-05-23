@@ -24,7 +24,7 @@ pre { margin: 0; }
 @font-face { font-family: 'Myriad Pro'; font-weight: bold; src: local('Myriad Pro Bold'), url('http://static2.anyclipimg.com/fonts/MyriadPro-Bold.otf') format('opentype'); }
 @font-face { font-family: 'Myriad Pro'; font-style: italic; src: local('Myriad Pro Italic'), url('http://static2.anyclipimg.com/fonts/MyriadPro-It.otf') format('opentype'); }
 @font-face { font-family: 'Myriad Pro'; font-weight: bold; font-style: italic; src: local('Myriad Pro Bold Italic'), url('http://static2.anyclipimg.com/fonts/MyriadPro-BoldIt.otf') format('opentype'); }
-body { font-family: "Myriad Pro", Myriad, "Myriad Web Pro", Helvetica, Arial, sans-serif; }
+body,input,textarea,pre { font-family: "Myriad Pro", Myriad, "Myriad Web Pro", Helvetica, Arial, sans-serif; }
 </style>
 </head>
 <body>
