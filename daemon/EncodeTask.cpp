@@ -99,8 +99,8 @@ void EncodeTask::kill()
 void EncodeTask::queueNext()
 {
 	if (m_tasks.length() == 0) {
-		currentMovie()->setEncoded(true);
 		setCompleted(true);
+		currentMovie()->setEncoded(true);
 	} else
 		encode(EncodeTarget::targets().at(m_tasks.at(0)));
 }

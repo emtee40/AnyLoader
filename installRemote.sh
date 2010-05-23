@@ -1,8 +1,4 @@
 #!/bin/sh
-git push
-ssh labs.anyclip.com "\
-(git clone /home/git/AnyLoader .al &&\
-cd .al/daemon &&\
-qmake && make && sudo make install && sudo /etc/init.d/anyloader restart);\
-rm -rf .al"
+rsync -vza --exclude=anyloader --exclude=*.o --exclude=moc_*.cpp --exclude Makefile daemon labs.anyclip.com: &&
+ssh labs.anyclip.com "cd daemon && qmake && make && sudo make install && sudo /etc/init.d/anyloader restart"
 ../GitTools/UploadToWebserver.sh web/
