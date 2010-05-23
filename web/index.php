@@ -67,7 +67,7 @@ foreach ($loader->getTitles() as $title) {
 	if (!$title->hasEncoded && $encodeStatus[0] != $title->title) {
 		echo "</a>";
 		if ($title->videoTrack != 0)
-			echo " <i>(<a href='javascript:void(0);' onclick='this.parentNode.parentNode.parentNode.nextSibling.style.display = \"table-row\";this.parentNode.parentNode.removeChild(this.parentNode);'>Show Tracks &darr;</a>)</i>";
+			echo " <i>(<a href='javascript:void(0);' onclick='this.parentNode.parentNode.parentNode.nextSibling.style.display = \"table-row\";this.parentNode.parentNode.removeChild(this.parentNode);'>Show Titles &darr;</a>)</i>";
 	}
 	echo "</td><td>";
 	if (!$title->hasEncoded && $encodeStatus[0] != $title->title)
