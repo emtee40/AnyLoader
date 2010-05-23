@@ -50,16 +50,7 @@ void Listener::readyRead()
 			}
 			streamer << MULTIENTRY;
 			foreach (Movie *movie, m_controller.movies()) {
-				QString audioTracks = "auto";
-				if (movie->audioTracks()->length() > 0) {
-					audioTracks.clear();
-					for (int i = 0; i < movie->audioTracks()->length(); ++i) {
-						if (!audioTracks.isEmpty())
-							audioTracks += ",";
-						audioTracks += QString::number(movie->audioTracks()->at(i));
-					}
-				}
-				streamer << movie->title() << SPACER << movie->hasRipped() << SPACER << movie->hasEncoded() << SPACER << movie->hasUploaded() << SPACER << movie->videoTrack() << SPACER << audioTracks << endl;
+				streamer << movie->title() << SPACER << movie->hasRipped() << SPACER << movie->hasEncoded() << SPACER << movie->hasUploaded() << SPACER << movie->videoTrack() << SPACER << movie->audioTrack() << endl;
 			}
 			streamer << MULTIENTRY;
 		} else if (call.at(0) == "addISO" && call.length() == 2) {
@@ -90,17 +81,13 @@ void Listener::readyRead()
 			}
 			movie->setVideoTrack(call.at(2).toInt());
 			streamer << "success" << endl;
-		} else if (call.at(0) == "setAudioTracks" && call.length() >= 3) {
+		} else if (call.at(0) == "setAudioTrack" && call.length() >= 3) {
 			movie = m_controller.movieForTitle(call.at(1));
 			if (!movie) {
 				streamer << "error" << endl;
 				continue;
 			}
-			movie->audioTracks()->clear();
-			if (call.at(2) != "auto") {
-				for (int i = 2; i < call.length(); i++)
-					movie->audioTracks()->append(call.at(i).toInt());
-			}
+			movie->setAudioTrack(call.at(2).toInt());
 			streamer << "success" << endl;
 		} else if (call.at(0) == "ripStatus") {
 #ifdef ENABLE_RIPPING

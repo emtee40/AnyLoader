@@ -10,6 +10,7 @@ Movie::Movie(const QString &title, QObject *parent) : QObject(parent),
 		m_title(title),
 		m_isoLocation(fileNameFromTitle(title, QLatin1String("Image"), QLatin1String("iso"))),
 		m_videoTrack(0),
+		m_audioTrack(1),
 		m_hasRipped(false),
 		m_hasUploaded(false)
 {
@@ -20,6 +21,7 @@ Movie::Movie(const QString &title, const QString &isoLocation, QObject *parent) 
 		m_title(title),
 		m_isoLocation(isoLocation),
 		m_videoTrack(0),
+		m_audioTrack(1),
 		m_hasRipped(QFile::exists(isoLocation)),
 		m_hasUploaded(false)
 {
@@ -30,6 +32,7 @@ Movie::Movie(const QString &title, const QString &isoLocation, const QString &mp
 		m_title(title),
 		m_isoLocation(isoLocation),
 		m_videoTrack(0),
+		m_audioTrack(1),
 		m_hasRipped(QFile::exists(isoLocation)),
 		m_hasUploaded(false)
 {
@@ -126,7 +129,13 @@ void Movie::setVideoTrack(quint8 videoTrack)
 	if (m_videoTrack)
 		emit statusChanged();
 }
-QList<quint8>* Movie::audioTracks()
+quint8 Movie::audioTrack() const
 {
-	return &m_audioTracks;
+	return m_audioTrack;
+}
+void Movie::setAudioTrack(quint8 audioTrack)
+{
+	m_audioTrack = audioTrack;
+	if (m_audioTrack)
+		emit statusChanged();
 }

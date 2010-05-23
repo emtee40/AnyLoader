@@ -27,17 +27,7 @@ void EncodeTask::encode(EncodeTarget target)
 	arguments << "-o" << currentMovie()->mp4Locations().at(m_tasks.at(0));
 	arguments << target.handBrakeArguments();
 	arguments << "-t" << QString::number(currentMovie()->videoTrack());
-	/*if (!movie->audioTracks()->length()) {
-		QString audioTracks;
-		for (int i = 0; i < movie->audioTracks()->length(); ++i) {
-			if (!audioTracks.isEmpty())
-				audioTracks += ",";
-			audioTracks += QString::number(movie->audioTracks()->at(i));
-		}
-		arguments << "-a" << audioTracks;
-	} else
-		arguments << "-N" << "eng" << "--native-dub";
-	*/
+	arguments << "-a" << QString::number(currentMovie()->audioTrack());
 	qDebug() << "Starting handbreak with arguments:" << arguments;
 	//m_process->setStandardErrorFile("/home/zx2c4/Desktop/error.log");
 	//m_process->setStandardOutputFile("/home/zx2c4/Desktop/out.log");
@@ -56,7 +46,7 @@ bool EncodeTask::executeTask(Movie *movie)
 }
 bool EncodeTask::canRunTask(const Movie *movie) const
 {
-	return movie->hasRipped() && !movie->hasEncoded() && !movie->hasUploaded() && movie->videoTrack() != 0;
+	return movie->hasRipped() && !movie->hasEncoded() && !movie->hasUploaded() && movie->videoTrack() != 0 && movie->audioTrack() != 0;
 }
 void EncodeTask::readyRead()
 {

@@ -50,8 +50,8 @@ class AnyLoader {
 				"hasRipped" => ($structure[1] == "1" ? true : false),
 				"hasEncoded" => ($structure[2] == "1" ? true : false),
 				"hasUploaded" => ($structure[3] == "1" ? true : false),
-				"videoTrack" => $structure[4],
-				"audioTracks" => ($structure[5] == "auto" ? "auto" : explode(",", $structure[5]))
+				"videoTrack" => (int)$structure[4],
+				"audioTrack" => (int)$structure[5]
 			);
 		}
 		return $all;
@@ -65,8 +65,8 @@ class AnyLoader {
 	public function setVideoTrack($movieTitle, $videoTrack) {
 		return $this->request("setVideoTrack", $movieTitle, $videoTrack);
 	}
-	public function setAudioTracks($movieTitle, $audioTracks) {
-		return $this->request("setAudioTracks", $movieTitle, implode("|", $audioTracks));
+	public function setAudioTrack($movieTitle, $audioTrack) {
+		return $this->request("setAudioTrack", $movieTitle, $audioTrack);
 	}
 	public function ripStatus() {
 		return $this->request("ripStatus");

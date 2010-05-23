@@ -4,8 +4,8 @@ $loader = new AnyLoader();
 
 if ($_GET["value"] == "videoTrack")
 	$loader->setVideoTrack($_GET["movie"], $_GET["track"]);
-elseif ($_GET["value"] == "audioTracks")
-	$loader->setAudioTracks($_GET["movie"], explode(",", $_GET["tracks"]));
+elseif ($_GET["value"] == "audioTrack")
+	$loader->setAudioTrack($_GET["movie"], $_GET["track"]);
 elseif ($_GET["value"] == "terminateRip")
 	$loader->terminateRip();
 elseif ($_GET["value"] == "terminateEncode")

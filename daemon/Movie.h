@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
-#include <QList>
 
 class Movie : public QObject
 {
@@ -35,7 +34,8 @@ public:
 
 	quint8 videoTrack() const;
 	void setVideoTrack(quint8 videoTrack);
-	QList<quint8>* audioTracks();
+	quint8 audioTrack() const;
+	void setAudioTrack(quint8 audioTrack);
 
 	static QString fileNameFromTitle(const QString &title, const QString &extension);
 	static QString titleFromISOName(const QString &isoName);
@@ -48,7 +48,7 @@ private:
 	QStringList m_mp4Locations;
 
 	quint8 m_videoTrack;
-	QList<quint8> m_audioTracks;
+	quint8 m_audioTrack;
 
 	bool m_hasRipped;
 	bool m_hasEncoded;

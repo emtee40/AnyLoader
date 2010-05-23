@@ -4,9 +4,15 @@
 <script language="JavaScript">
 function setVideoTrack(movie)
 {
-	var track = parseInt(prompt("After looking at the list of video tracks below, choose ONE track by entering the track number here.", "1"));
-	if (!isNaN(track))
+	var track = parseInt(prompt("After looking at the list of video titles below, choose one track by entering the title number here.", "1"));
+	if (!isNaN(track) && track >= 0)
 		location.href = "setValue.php?value=videoTrack&movie=" + encodeURIComponent(movie) + "&track=" + track;
+}
+function setAudioTrack(movie)
+{
+	var track = parseInt(prompt("After looking at the list of audio tracks for your desired video track below, choose one audio track by entering the track number here.", "1"));
+	if (!isNaN(track) && track >= 0)
+		location.href = "setValue.php?value=audioTrack&movie=" + encodeURIComponent(movie) + "&track=" + track;
 }
 </script>
 <style>
@@ -49,7 +55,7 @@ echo "<tr><td colspan=2><a href=\"setValue.php?value=startTerminatedTasks\">Star
 echo "</table>";
 echo "<br>";
 echo "<table border=1>";
-echo "<tr><th>Title</th><th>Ripped</th><th>Encoded</th><th>Uploaded</th><th>Video Track</th></tr>";
+echo "<tr><th>Title</th><th>Ripped</th><th>Encoded</th><th>Uploaded</th><th>Video Title</th><th>Audio Track</th></tr>";
 foreach ($loader->getTitles() as $title) {
 	echo "<tr><td>".$title->title." (<a href=\"setValue.php?value=removeMovie&movie=".$title->title."\">x</a>)</td><td>".yesno($title->hasRipped)."</td><td>".yesno($title->hasEncoded)."</td><td>".yesno($title->hasUploaded)."</td><td>";
 	if (!$title->hasEncoded && $encodeStatus[0] != $title->title)
@@ -63,17 +69,26 @@ foreach ($loader->getTitles() as $title) {
 		if ($title->videoTrack != 0)
 			echo " <i>(<a href='javascript:void(0);' onclick='this.parentNode.parentNode.parentNode.nextSibling.style.display = \"table-row\";this.parentNode.parentNode.removeChild(this.parentNode);'>Show Tracks &darr;</a>)</i>";
 	}
+	echo "</td><td>";
+	if (!$title->hasEncoded && $encodeStatus[0] != $title->title)
+		echo "<a href=\"javascript:setAudioTrack('".$title->title."');\">";
+	if ($title->audioTrack == 0)
+		echo "(not yet selected)";
+	else
+		echo "Track ".$title->audioTrack;
+	if (!$title->hasEncoded && $encodeStatus[0] != $title->title)
+		echo "</a>";
 	echo "</td></tr>";
 	if (!$title->hasEncoded && $encodeStatus[0] != $title->title) {
 		echo "<tr";
 		if ($title->videoTrack != 0)
 			echo " style='display:none;'";
-		echo "><td></td><td colspan=4><div style='height:300px;width:700px;overflow:auto'><pre>";
+		echo "><td></td><td colspan=5><div style='height:300px;width:700px;overflow:auto'><pre>";
 		echo $loader->getTitleInformation($title->title);
 		echo "</pre></div></td></tr>";
 	}
 }
-echo "<tr><th colspan=5><a href=\"setValue.php?value=loadISOs\">Load ISOs From Attached Hard Drive</a></th></tr>";
+echo "<tr><th colspan=6><a href=\"setValue.php?value=loadISOs\">Load ISOs From Attached Hard Drive</a></th></tr>";
 echo "</table>";
 ?>
 </body>
