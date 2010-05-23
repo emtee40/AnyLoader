@@ -51,13 +51,13 @@ QList<EncodeTarget> EncodeTarget::targets()
 				<< "--decomb"
 				<< "-e" << "x264"
 				<< "-b" << "800"
-				<< "-a" << "1,1"
+				<< "-a" << "1"
 				<< "-2"
 				<< "-r" << "25"
-				<< "-E" << "faac,ac3"
-				<< "-6" << "dpl2,auto"
-				<< "-R" << "48,Auto"
-				<< "-B" << "128,auto"
+				<< "-E" << "faac"
+				<< "-6" << "dpl2"
+				<< "-R" << "48"
+				<< "-B" << "128"
 				<< "-x" << "b-adapt=2:rc-lookahead=50:keyint=50:min-keyint=25",
 			"-pd-high.mp4",
 			"PD High"
