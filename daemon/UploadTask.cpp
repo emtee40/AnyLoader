@@ -6,11 +6,13 @@
 
 UploadTask::UploadTask(QObject *parent) : Task(false, parent),
 	m_ftp(this),
+	m_sizeQuery(0),
 	m_currentFile(0)
 {
 	connect(&m_ftp, SIGNAL(dataTransferProgress(qint64,qint64)), this, SIGNAL(uploadProgress(qint64,qint64)));
 	connect(&m_ftp, SIGNAL(dataTransferProgress(qint64,qint64)), this, SLOT(storeUploadProgress(qint64,qint64)));
 	connect(&m_ftp, SIGNAL(commandFinished(int,bool)), this, SLOT(commandFinished(int,bool)));
+	connect(&m_ftp, SIGNAL(rawCommandReply(int,QString)), this, SLOT(rawCommandReply(int,QString)));
 }
 UploadTask::~UploadTask()
 {
@@ -43,23 +45,39 @@ void UploadTask::queueNext()
 		return;
 	}
 	m_currentFile = new QFile(currentMovie()->mp4Locations().at(m_currentFileIndex));
-	m_fileUpload = m_ftp.put(m_currentFile, QFileInfo(m_currentFile->fileName()).fileName(), QFtp::Binary);
+	m_status = QString("%1 - Checking for already existing file...").arg(EncodeTarget::targets().at(m_currentFileIndex).name());
+	m_sizeQuery = m_ftp.rawCommand(QString("SIZE %1").arg(QFileInfo(m_currentFile->fileName()).fileName()));
+}
+void UploadTask::rawCommandReply(int replyCode, const QString &detail)
+{
+	if (replyCode == 213 && m_ftp.currentId() == m_sizeQuery) {
+		bool success;
+		int size = detail.toLongLong(&success);
+		if (success && m_currentFile->size() == size) {
+			++m_currentFileIndex;
+			queueNext();
+			return;
+		} else
+			commandFinished(m_sizeQuery, true);
+	}
 }
 void UploadTask::cleanUp(bool result)
 {
 	currentMovie()->setUploaded(result);
 }
-
 void UploadTask::commandFinished(int id, bool error)
 {
-	if (error)
+	if (error && id == m_sizeQuery) {
+		m_status = QString("%1 - Starting transfer...").arg(EncodeTarget::targets().at(m_currentFileIndex).name());
+		m_fileUpload = m_ftp.put(m_currentFile, QFileInfo(m_currentFile->fileName()).fileName(), QFtp::Binary);
+	}
+	else if (error)
 		terminate();
 	else if (id == m_fileUpload) {
 		++m_currentFileIndex;
 		queueNext();
 	}
 }
-
 bool UploadTask::canRunTask(const Movie *movie) const
 {
 	return movie->hasEncoded() && !movie->hasUploaded();

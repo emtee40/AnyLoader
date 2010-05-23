@@ -25,11 +25,13 @@ private:
 	int m_currentFileIndex;
 	QString m_status;
 	int m_fileUpload;
+	int m_sizeQuery;
 	QFile *m_currentFile;
 
 private slots:
 	void storeUploadProgress(qint64 done, qint64 total);
 	void commandFinished(int id, bool error);
+	void rawCommandReply(int replyCode, const QString &detail);
 
 signals:
 	void uploadProgress(qint64 done, qint64 total);
