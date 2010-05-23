@@ -33,6 +33,10 @@ class AnyLoader {
 			return true;
 		elseif (strpos($line, "|") !== false)
 			return explode("|", $line);
+		elseif ($line == "1")
+			return true;
+		elseif ($line == "0")
+			return false;
 		else
 			return $line;
 	}
@@ -91,6 +95,9 @@ class AnyLoader {
 	}
 	public function removeMovie($movieTitle) {
 		return $this->request("removeMovie", $movieTitle);
+	}
+	public function isRippingEnabled() {
+		return $this->request("isRippingEnabled");
 	}
 }
 ?>

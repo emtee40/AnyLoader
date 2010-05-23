@@ -20,8 +20,8 @@ a { text-decoration: none; color: blue; }
 </style>
 </head>
 <body>
-<img src="http://labs.anyclip.com/labs-banner.png" style="float:right"> 
-<h2>AnyLoader</h2>
+<img src="http://labs.anyclip.com/labs-logo.png" style="float:right">
+<h2>AnyLoader<br><font size="-1"><i>(testing phase)</i></font></h2>
 <?php
 function yesno($bool)
 {
@@ -29,14 +29,17 @@ function yesno($bool)
 }
 require_once("AnyLoader.php");
 $loader = new AnyLoader();
+$rippingEnabled = $loader->isRippingEnabled();
 echo "<table border=1>";
-echo "<tr><th>Rip Status:</th><td>";
-$ripStatus = $loader->ripStatus();
-if ($ripStatus === false)
-	echo "(idle)";
-else
-	echo "<i>".$ripStatus[0]."</i>: ".$ripStatus[1]." (<a href=\"setValue.php?value=terminateRip\">terminate</a>)";
-echo "</td></tr>";
+if ($rippingEnabled) {
+	echo "<tr><th>Rip Status:</th><td>";
+	$ripStatus = $loader->ripStatus();
+	if ($ripStatus === false)
+		echo "(idle)";
+	else
+		echo "<i>".$ripStatus[0]."</i>: ".$ripStatus[1]." (<a href=\"setValue.php?value=terminateRip\">terminate</a>)";
+	echo "</td></tr>";
+}
 echo "<tr><th>Encode Status:</th><td>";
 $encodeStatus = $loader->encodeStatus();
 if ($encodeStatus === false)
@@ -55,9 +58,15 @@ echo "<tr><td colspan=2><a href=\"setValue.php?value=startTerminatedTasks\">Star
 echo "</table>";
 echo "<br>";
 echo "<table border=1>";
-echo "<tr><th>Title</th><th>Ripped</th><th>Encoded</th><th>Uploaded</th><th>Video Title</th><th>Audio Track</th></tr>";
+echo "<tr><th>Title</th>";
+if ($rippingEnabled)
+	echo "<th>Ripped</th>";
+echo "<th>Encoded</th><th>Uploaded</th><th>Video Title</th><th>Audio Track</th></tr>";
 foreach ($loader->getTitles() as $title) {
-	echo "<tr><td>".$title->title." (<a href=\"setValue.php?value=removeMovie&movie=".$title->title."\">x</a>)</td><td>".yesno($title->hasRipped)."</td><td>".yesno($title->hasEncoded)."</td><td>".yesno($title->hasUploaded)."</td><td>";
+	echo "<tr><td>".$title->title." (<a href=\"setValue.php?value=removeMovie&movie=".$title->title."\">x</a>)</td>";
+	if ($rippingEnabled)
+		echo "<td>".yesno($title->hasRipped)."</td>";
+	echo "<td>".yesno($title->hasEncoded)."</td><td>".yesno($title->hasUploaded)."</td><td>";
 	if (!$title->hasEncoded && $encodeStatus[0] != $title->title)
 		echo "<a href=\"javascript:setVideoTrack('".$title->title."');\">";
 	if ($title->videoTrack == 0)
@@ -83,12 +92,12 @@ foreach ($loader->getTitles() as $title) {
 		echo "<tr";
 		if ($title->videoTrack != 0)
 			echo " style='display:none;'";
-		echo "><td></td><td colspan=5><div style='height:300px;width:700px;overflow:auto'><pre>";
+		echo "><td></td><td colspan=".($rippingEnabled ? "5" : "4")."><div style='height:300px;width:700px;overflow:auto'><pre>";
 		echo $loader->getTitleInformation($title->title);
 		echo "</pre></div></td></tr>";
 	}
 }
-echo "<tr><th colspan=6><a href=\"setValue.php?value=loadISOs\">Load ISOs From Attached Hard Drive</a></th></tr>";
+echo "<tr><th colspan=".($rippingEnabled ? "6" : "5")."><a href=\"setValue.php?value=loadISOs\">Load ISOs From Attached Hard Drive</a></th></tr>";
 echo "</table>";
 ?>
 </body>

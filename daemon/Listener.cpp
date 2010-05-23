@@ -140,6 +140,12 @@ void Listener::readyRead()
 				streamer << "success" << endl;
 			else
 				streamer << "error" << endl;
+		} else if (call.at(0) == "isRippingEnabled") {
+#ifdef ENABLE_RIPPING
+			streamer << true << endl;
+#else
+			streamer << false << endl;
+#endif
 		} else {
 			streamer << "error" << endl;
 		}

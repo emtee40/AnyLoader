@@ -8,7 +8,7 @@
 #ifdef ENABLE_RIPPING
 Movie::Movie(const QString &title, QObject *parent) : QObject(parent),
 		m_title(title),
-		m_isoLocation(fileNameFromTitle(title, QLatin1String("Image"), QLatin1String("iso"))),
+		m_isoLocation(fileNameFromTitle(title, QLatin1String("iso"))),
 		m_videoTrack(0),
 		m_audioTrack(1),
 		m_hasRipped(false),

@@ -1,4 +1,4 @@
-# CONFIG += ripping
+#CONFIG += ripping
 QT += network
 QT -= gui
 TARGET = anyloader
@@ -22,15 +22,15 @@ HEADERS += Movie.h \
     TitleInformation.h \
     Listener.h \
     EncodeTarget.h
-ripping { 
+ripping {
     QT += dbus
     LIBS += -ldvdcss \
-        -ldvdread
+	-ldvdread
     DEFINES += ENABLE_RIPPING
     HEADERS += RipTask.h \
-        DVDDrive.h
+	DVDDrive.h
     SOURCES += RipTask.cpp \
-        DVDDrive.cpp
+	DVDDrive.cpp
 }
 OTHER_FILES += ../Protocol.txt
 QMAKE_STRIP = echo
