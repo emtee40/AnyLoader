@@ -17,6 +17,8 @@ function setAudioTrack(movie)
 </script>
 <style>
 a { text-decoration: none; color: blue; }
+td, th { border: 1px gray solid; padding: 2px; }
+table { border-collapse: collapse; }
 </style>
 </head>
 <body>
@@ -30,9 +32,9 @@ function yesno($bool)
 require_once("AnyLoader.php");
 $loader = new AnyLoader();
 $rippingEnabled = $loader->isRippingEnabled();
-echo "<table border=1>";
+echo "<table>";
 if ($rippingEnabled) {
-	echo "<tr><th>Rip Status:</th><td>";
+	echo "<tr><th>Rip Status</th><td>";
 	$ripStatus = $loader->ripStatus();
 	if ($ripStatus === false)
 		echo "(idle)";
@@ -40,24 +42,24 @@ if ($rippingEnabled) {
 		echo "<i>".$ripStatus[0]."</i>: ".$ripStatus[1]." (<a href=\"setValue.php?value=terminateRip\">terminate</a>)";
 	echo "</td></tr>";
 }
-echo "<tr><th>Encode Status:</th><td>";
+echo "<tr><th>Encode Status</th><td>";
 $encodeStatus = $loader->encodeStatus();
 if ($encodeStatus === false)
 	echo "(idle)";
 else
 	echo "<i>".$encodeStatus[0]."</i>: ".$encodeStatus[1]." (<a href=\"setValue.php?value=terminateEncode\">terminate</a>)";
 echo "</td></tr>";
-echo "<tr><th>Upload Status:</th><td>";
+echo "<tr><th>Upload Status</th><td>";
 $uploadStatus = $loader->uploadStatus();
 if ($uploadStatus === false)
 	echo "(idle)";
 else
 	echo "<i>".$uploadStatus[0]."</i>: ".$uploadStatus[1]." (<a href=\"setValue.php?value=terminateUpload\">terminate</a>)";
 echo "</td></tr>";
-echo "<tr><td colspan=2><a href=\"setValue.php?value=startTerminatedTasks\">Start Terminated Tasks</a></td></tr>";
+echo "<tr><td align=center colspan=2><a href=\"setValue.php?value=startTerminatedTasks\">Start Terminated Tasks</a></td></tr>";
 echo "</table>";
 echo "<br>";
-echo "<table border=1>";
+echo "<table>";
 echo "<tr><th>Title</th>";
 if ($rippingEnabled)
 	echo "<th>Ripped</th>";
