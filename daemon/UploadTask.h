@@ -2,8 +2,8 @@
 #define UPLOADTASK_H
 
 #include "Task.h"
-#include <QFtp>
 class QFile;
+class QFtp;
 
 class UploadTask : public Task
 {
@@ -21,7 +21,7 @@ protected:
 
 private:
 	void queueNext();
-	QFtp m_ftp;
+	QFtp *m_ftp;
 	int m_currentFileIndex;
 	QString m_status;
 	int m_fileUpload;

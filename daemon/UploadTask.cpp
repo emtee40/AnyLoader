@@ -1,18 +1,15 @@
 #include "UploadTask.h"
+#include "EncodeTarget.h"
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
-#include <EncodeTarget.h>
+#include <QFtp>
 
 UploadTask::UploadTask(QObject *parent) : Task(false, parent),
-	m_ftp(this),
+	m_ftp(0),
 	m_sizeQuery(0),
 	m_currentFile(0)
 {
-	connect(&m_ftp, SIGNAL(dataTransferProgress(qint64,qint64)), this, SIGNAL(uploadProgress(qint64,qint64)));
-	connect(&m_ftp, SIGNAL(dataTransferProgress(qint64,qint64)), this, SLOT(storeUploadProgress(qint64,qint64)));
-	connect(&m_ftp, SIGNAL(commandFinished(int,bool)), this, SLOT(commandFinished(int,bool)));
-	connect(&m_ftp, SIGNAL(rawCommandReply(int,QString)), this, SLOT(rawCommandReply(int,QString)));
 }
 UploadTask::~UploadTask()
 {
@@ -22,12 +19,17 @@ UploadTask::~UploadTask()
 bool UploadTask::executeTask(Movie *movie)
 {
 	Q_UNUSED(movie)
+	m_ftp = new QFtp(this);
+	connect(m_ftp, SIGNAL(dataTransferProgress(qint64,qint64)), this, SIGNAL(uploadProgress(qint64,qint64)));
+	connect(m_ftp, SIGNAL(dataTransferProgress(qint64,qint64)), this, SLOT(storeUploadProgress(qint64,qint64)));
+	connect(m_ftp, SIGNAL(commandFinished(int,bool)), this, SLOT(commandFinished(int,bool)));
+	connect(m_ftp, SIGNAL(rawCommandReply(int,QString)), this, SLOT(rawCommandReply(int,QString)));
 	m_currentFile = 0;
 	m_currentFileIndex = 0;
 	m_status.clear();
 	m_fileUpload = 0;
-	m_ftp.connectToHost("62.219.1.20");
-	m_ftp.login("title_loader", "clip0l0gy");
+	m_ftp->connectToHost("62.219.1.20");
+	m_ftp->login("title_loader", "clip0l0gy");
 	queueNext();
 	return true;
 }
@@ -40,23 +42,22 @@ void UploadTask::queueNext()
 	}
 	m_status.clear();
 	if (m_currentFileIndex >= currentMovie()->mp4Locations().length()) {
-		m_ftp.close();
+		m_ftp->close();
 		setCompleted(true);
 		return;
 	}
 	m_currentFile = new QFile(currentMovie()->mp4Locations().at(m_currentFileIndex));
 	m_status = QString("%1 - Checking for already existing file...").arg(EncodeTarget::targets().at(m_currentFileIndex).name());
-	m_sizeQuery = m_ftp.rawCommand(QString("SIZE %1").arg(QFileInfo(m_currentFile->fileName()).fileName()));
+	m_sizeQuery = m_ftp->rawCommand(QString("SIZE %1").arg(QFileInfo(m_currentFile->fileName()).fileName()));
 }
 void UploadTask::rawCommandReply(int replyCode, const QString &detail)
 {
-	if (replyCode == 213 && m_ftp.currentId() == m_sizeQuery) {
+	if (replyCode == 213 && m_ftp->currentId() == m_sizeQuery) {
 		bool success;
 		int size = detail.toLongLong(&success);
 		if (success && m_currentFile->size() == size) {
 			++m_currentFileIndex;
 			queueNext();
-			return;
 		} else
 			commandFinished(m_sizeQuery, true);
 	}
@@ -69,7 +70,7 @@ void UploadTask::commandFinished(int id, bool error)
 {
 	if (error && id == m_sizeQuery) {
 		m_status = QString("%1 - Starting transfer...").arg(EncodeTarget::targets().at(m_currentFileIndex).name());
-		m_fileUpload = m_ftp.put(m_currentFile, QFileInfo(m_currentFile->fileName()).fileName(), QFtp::Binary);
+		m_fileUpload = m_ftp->put(m_currentFile, QFileInfo(m_currentFile->fileName()).fileName(), QFtp::Binary);
 	}
 	else if (error)
 		terminate();
@@ -84,8 +85,8 @@ bool UploadTask::canRunTask(const Movie *movie) const
 }
 void UploadTask::kill()
 {
-	m_ftp.abort();
-	m_ftp.close();
+	delete m_ftp;
+	m_ftp = 0;
 	m_status.clear();
 	if (m_currentFile) {
 		m_currentFile->close();
