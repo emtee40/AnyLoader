@@ -57,12 +57,18 @@ foreach ($loader->getTitles() as $title) {
 	if ($title->videoTrack == 0)
 		echo "(not yet selected)";
 	else
-		echo $title->videoTrack;
-	if (!$title->hasEncoded && $encodeStatus[0] != $title->title)
+		echo "Title ".$title->videoTrack;
+	if (!$title->hasEncoded && $encodeStatus[0] != $title->title) {
 		echo "</a>";
+		if ($title->videoTrack != 0)
+			echo " <i>(<a href='javascript:void(0);' onclick='this.parentNode.parentNode.parentNode.nextSibling.style.display = \"table-row\";this.parentNode.parentNode.removeChild(this.parentNode);'>Show Tracks &darr;</a>)</i>";
+	}
 	echo "</td></tr>";
 	if (!$title->hasEncoded && $encodeStatus[0] != $title->title) {
-		echo "<tr><td></td><td colspan=4><div style='height:300px;width:700px;overflow:auto'><pre>";
+		echo "<tr";
+		if ($title->videoTrack != 0)
+			echo " style='display:none;'";
+		echo "><td></td><td colspan=4><div style='height:300px;width:700px;overflow:auto'><pre>";
 		echo $loader->getTitleInformation($title->title);
 		echo "</pre></div></td></tr>";
 	}
