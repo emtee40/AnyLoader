@@ -84,14 +84,14 @@ void EncodeTask::readyRead()
 }
 void EncodeTask::kill()
 {
-	m_status.clear();
-	m_tasks.clear();
 	if (m_process) {
 		disconnect(m_process, 0, 0, 0);
 		m_process->terminate();
 		m_process->deleteLater();
 		m_process = 0;
 	}
+	m_status.clear();
+	m_tasks.clear();
 	if (currentMovie() && m_tasks.length() != 0) {
 		QFile::remove(currentMovie()->mp4Locations().at(m_tasks.at(0)));
 	}
