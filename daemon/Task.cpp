@@ -39,6 +39,7 @@ void Task::terminate()
 void Task::setCompleted(bool result)
 {
 	m_isRunning = false;
+	cleanUp(result);
 	m_currentMovie = 0;
 	emit completed(result);
 }

@@ -17,6 +17,7 @@ public:
 protected:
 	bool executeTask(Movie *movie);
 	void kill();
+	void cleanUp(bool result);
 
 private:
 	void queueNext();

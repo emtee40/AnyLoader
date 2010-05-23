@@ -15,8 +15,10 @@ public:
 	bool saveImageToPath(const QString &path);
 	bool canRunTask(const Movie *movie) const;
 	QString status() const;
+
 public slots:
 	void kill();
+
 private:
 	static int cmpvob(const void *p1, const void *p2);
 	typedef struct vobfile {
@@ -25,8 +27,11 @@ private:
 	QReadWriteLock m_locker;
 	bool m_terminate;
 	QString m_status;
+
 protected:
 	bool executeTask(Movie *movie);
+	void cleanUp(bool result);
+
 signals:
 	void extractProgress(int current, int total);
 };

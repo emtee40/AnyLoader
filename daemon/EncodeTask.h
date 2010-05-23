@@ -15,19 +15,25 @@ public:
 	~EncodeTask();
 	bool canRunTask(const Movie *movie) const;
 	QString status() const;
+
 protected:
 	bool executeTask(Movie *movie);
+	void cleanUp(bool result);
+
 private:
 	void encode(EncodeTarget target);
 	void queueNext();
 	QProcess *m_process;
 	QString m_status;
 	QList<int> m_tasks;
+
 private slots:
 	void finished(int exitCode, QProcess::ExitStatus exitStats);
 	void readyRead();
+
 public slots:
 	void kill();
+
 signals:
 	void encodeProgress(int currentTask, int totalTasks, float percent, float currentFps, float avgFps, QTime timeRemaining);
 };

@@ -81,18 +81,21 @@ void EncodeTask::kill()
 		m_process = 0;
 	}
 	m_status.clear();
-	m_tasks.clear();
 	if (currentMovie() && m_tasks.length() != 0) {
 		QFile::remove(currentMovie()->mp4Locations().at(m_tasks.at(0)));
 	}
+	m_tasks.clear();
 }
 void EncodeTask::queueNext()
 {
-	if (m_tasks.length() == 0) {
+	if (m_tasks.length() == 0)
 		setCompleted(true);
-		currentMovie()->setEncoded(true);
-	} else
+	else
 		encode(EncodeTarget::targets().at(m_tasks.at(0)));
+}
+void EncodeTask::cleanUp(bool result)
+{
+	currentMovie()->setEncoded(result);
 }
 void EncodeTask::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {

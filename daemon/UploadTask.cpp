@@ -40,12 +40,16 @@ void UploadTask::queueNext()
 	if (m_currentFileIndex >= currentMovie()->mp4Locations().length()) {
 		m_ftp.close();
 		setCompleted(true);
-		currentMovie()->setUploaded(true);
 		return;
 	}
 	m_currentFile = new QFile(currentMovie()->mp4Locations().at(m_currentFileIndex));
 	m_fileUpload = m_ftp.put(m_currentFile, QFileInfo(m_currentFile->fileName()).fileName(), QFtp::Binary);
 }
+void UploadTask::cleanUp(bool result)
+{
+	currentMovie()->setUploaded(result);
+}
+
 void UploadTask::commandFinished(int id, bool error)
 {
 	if (error)

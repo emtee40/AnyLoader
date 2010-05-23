@@ -39,11 +39,13 @@ bool RipTask::executeTask(Movie *movie)
 	m_status.clear();
 	m_terminate = false;
 	m_locker.unlock();
-	bool ret = saveImageToPath(movie->isoLocation());
-	if (ret)
-		movie->setRipped(true);
-	return ret;
+	return saveImageToPath(movie->isoLocation());
 }
+void RipTask::cleanUp(bool result)
+{
+	currentMovie()->setRipped(result);
+}
+
 bool RipTask::canRunTask(const Movie *movie) const
 {
 	return !movie->hasRipped() && !movie->hasUploaded() && !movie->hasEncoded();

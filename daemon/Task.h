@@ -20,6 +20,7 @@ protected:
 	virtual bool executeTask(Movie *movie) = 0;
 	virtual void kill() = 0;
 	void setCompleted(bool result);
+	virtual void cleanUp(bool result) = 0;
 
 private:
 	QFutureWatcher<bool> *m_watcher;
