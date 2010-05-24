@@ -38,6 +38,9 @@ private:
 
 	void runTasks(Movie *movie);
 
+private slots:
+	void runTasksIfTrue(bool runThem);
+
 public slots:
 	void runTasks();
 

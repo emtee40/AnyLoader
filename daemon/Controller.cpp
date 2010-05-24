@@ -10,12 +10,23 @@ Controller::Controller(QObject *parent) : QObject(parent),
 	m_encodeTask(this),
 	m_uploadTask(this)
 {
+#ifdef ENABLE_RIPPING
+	connect(&m_ripTask, SIGNAL(completed(bool)), this, SLOT(runTasksIfTrue(bool)));
+#endif
+	connect(&m_encodeTask, SIGNAL(completed(bool)), this, SLOT(runTasksIfTrue(bool)));
+	connect(&m_uploadTask, SIGNAL(completed(bool)), this, SLOT(runTasksIfTrue(bool)));
 }
 void Controller::runTasks()
 {
 	foreach(Movie* movie, m_movies)
 		runTasks(movie);
 }
+void Controller::runTasksIfTrue(bool runThem)
+{
+	if (runThem)
+		runTasks();
+}
+
 void Controller::runTasks(Movie *movie)
 {
 #ifdef ENABLE_RIPPING
@@ -35,7 +46,7 @@ bool Controller::addMovie(Movie *movie)
 			return false;
 		}
 	}
-	connect(movie, SIGNAL(statusChanged()), this, SLOT(runTasks()));
+	connect(movie, SIGNAL(trackSet()), this, SLOT(runTasks()));
 	m_movies.append(movie);
 	movie->setParent(this);
 	runTasks(movie);
@@ -72,6 +83,7 @@ bool Controller::removeMovie(Movie *movie)
 {
 	if (!m_movies.removeOne(movie))
 		return false;
+	disconnect(movie, 0, 0, 0);
 #ifdef ENABLE_RIPPING
 	if (m_ripTask.currentMovie() == movie)
 		m_ripTask.terminate();
@@ -81,6 +93,7 @@ bool Controller::removeMovie(Movie *movie)
 	if (m_uploadTask.currentMovie() == movie)
 		m_uploadTask.terminate();
 	runTasks();
+	movie->deleteLater();
 	return true;
 }
 

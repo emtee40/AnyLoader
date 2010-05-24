@@ -81,8 +81,6 @@ bool Movie::hasRipped() const
 void Movie::setRipped(bool ripped)
 {
 	m_hasRipped = ripped && QFile::exists(m_isoLocation);
-	if (m_hasRipped)
-		emit statusChanged();
 }
 QStringList Movie::mp4Locations() const
 {
@@ -106,8 +104,6 @@ void Movie::setEncoded(bool encoded)
 	m_hasEncoded = encoded;
 	foreach (QString mp4Location, m_mp4Locations)
 		m_hasEncoded &= QFile::exists(mp4Location);
-	if (m_hasEncoded)
-		emit statusChanged();
 }
 bool Movie::hasUploaded() const
 {
@@ -116,8 +112,6 @@ bool Movie::hasUploaded() const
 void Movie::setUploaded(bool uploaded)
 {
 	m_hasUploaded = uploaded;
-	if (m_hasUploaded)
-		emit statusChanged();
 }
 quint8 Movie::videoTrack() const
 {
@@ -127,7 +121,7 @@ void Movie::setVideoTrack(quint8 videoTrack)
 {
 	m_videoTrack = videoTrack;
 	if (m_videoTrack)
-		emit statusChanged();
+		emit trackSet();
 }
 quint8 Movie::audioTrack() const
 {
@@ -137,5 +131,5 @@ void Movie::setAudioTrack(quint8 audioTrack)
 {
 	m_audioTrack = audioTrack;
 	if (m_audioTrack)
-		emit statusChanged();
+		emit trackSet();
 }

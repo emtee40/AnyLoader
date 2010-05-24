@@ -19,8 +19,8 @@ void Task::runTask(Movie *movie)
 		qDebug() << this->objectName() << "is already running while attempting to run on" << movie->title();
 		return;
 	}
-	m_isRunning = true;
 	m_currentMovie = movie;
+	m_isRunning = true;
 	if (m_watcher)
 		m_watcher->setFuture(QtConcurrent::run(this, &Task::executeTask, movie));
 	else
@@ -38,8 +38,8 @@ void Task::terminate()
 }
 void Task::setCompleted(bool result)
 {
-	m_isRunning = false;
 	cleanUp(result);
+	m_isRunning = false;
 	m_currentMovie = 0;
 	emit completed(result);
 }

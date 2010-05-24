@@ -55,7 +55,7 @@ private:
 	bool m_hasUploaded;
 
 signals:
-	void statusChanged() const;
+	void trackSet() const;
 };
 
 #endif // MOVIE_H
