@@ -42,7 +42,11 @@ void UploadTask::queueNext()
 	}
 	m_status.clear();
 	if (m_currentFileIndex >= currentMovie()->mp4Locations().length()) {
-		m_ftp->close();
+		if (m_ftp) {
+			disconnect(m_ftp, 0, 0, 0);
+			m_ftp->deleteLater();
+			m_ftp = 0;
+		}
 		setCompleted(true);
 		return;
 	}
@@ -85,8 +89,11 @@ bool UploadTask::canRunTask(const Movie *movie) const
 }
 void UploadTask::kill()
 {
-	delete m_ftp;
-	m_ftp = 0;
+	if (m_ftp) {
+		disconnect(m_ftp, 0, 0, 0);
+		m_ftp->deleteLater();
+		m_ftp = 0;
+	}
 	m_status.clear();
 	if (m_currentFile) {
 		m_currentFile->close();
