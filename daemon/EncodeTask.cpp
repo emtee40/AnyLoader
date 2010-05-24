@@ -17,7 +17,7 @@ EncodeTask::~EncodeTask()
 }
 void EncodeTask::encode(EncodeTarget target)
 {
-	qDebug() << "Encoding" << target.name() << "for" << currentMovie()->title();
+	m_status = QString("%1 - Starting HandBrake...").arg(target.name());
 	m_process = new QProcess(this);
 	connect(m_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(terminate()));
 	connect(m_process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(finished(int,QProcess::ExitStatus)));
