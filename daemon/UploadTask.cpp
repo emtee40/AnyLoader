@@ -58,7 +58,7 @@ void UploadTask::rawCommandReply(int replyCode, const QString &detail)
 {
 	if (replyCode == 213 && m_ftp->currentId() == m_sizeQuery) {
 		bool success;
-		int size = detail.toLongLong(&success);
+		long long size = detail.toLongLong(&success);
 		if (success && m_currentFile->size() == size) {
 			++m_currentFileIndex;
 			queueNext();
