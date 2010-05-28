@@ -36,6 +36,7 @@ QList<EncodeTarget> EncodeTarget::targets()
 				<< "-6" << "dpl2"
 				<< "-R" << "48"
 				<< "-B" << "96"
+				<< "--no-dvdnav"
 				<< "-x" << "ref=2:bframes=2:subq=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0",
 			"-streaming.mp4",
 			"Streaming"

@@ -16,6 +16,7 @@ QString TitleInformation::readTitles(const QString &location)
 	QStringList arguments;
 	arguments << "-i" << location;
 	arguments << "-t" << "0";
+	arguments << "--no-dvdnav";
 	process.start(QString("%1/HandBrakeCLI").arg(QCoreApplication::applicationDirPath()), arguments, QIODevice::ReadOnly);
 	process.waitForFinished();
 	QStringList output;
