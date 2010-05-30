@@ -28,8 +28,8 @@ bool UploadTask::executeTask(Movie *movie)
 	m_currentFileIndex = 0;
 	m_status.clear();
 	m_fileUpload = 0;
-	m_ftp->connectToHost("62.219.1.20");
-	m_ftp->login("title_loader", "clip0l0gy");
+	m_ftp->connectToHost("ec2-184-73-60-225.compute-1.amazonaws.com");
+	m_ftp->login("ftp_user", "8wu^x,1mWb!/o;xrp.:x37$Dr");
 	queueNext();
 	return true;
 }
