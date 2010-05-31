@@ -30,7 +30,6 @@ bool UploadTask::executeTask(Movie *movie)
 	m_fileUpload = 0;
 	m_ftp->connectToHost("ec2-184-73-60-225.compute-1.amazonaws.com");
 	m_ftp->login("ftp_user", "8wu^x,1mWb!/o;xrp.:x37$Dr");
-	m_ftp->setTransferMode(QFtp::Active);
 	queueNext();
 	return true;
 }
