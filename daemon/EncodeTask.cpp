@@ -28,6 +28,7 @@ void EncodeTask::encode(EncodeTarget target)
 	arguments << target.handBrakeArguments();
 	arguments << "-t" << QString::number(currentMovie()->videoTrack());
 	arguments << "-a" << QString::number(currentMovie()->audioTrack());
+	arguments << "--no-dvdnav";
 	qDebug() << "Starting handbreak with arguments:" << arguments;
 	//m_process->setStandardErrorFile("/home/zx2c4/Desktop/error.log");
 	//m_process->setStandardOutputFile("/home/zx2c4/Desktop/out.log");
