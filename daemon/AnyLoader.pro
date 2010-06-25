@@ -39,6 +39,9 @@ handbrake.files = ./HandBrakeCLI
 init.path = /etc/init.d
 init.files = ./init.d/anyloader
 target.path = /usr/local/bin
+s3cfg.path = /var/lib/anyloader
+s3cfg.files = ./s3cfg
 INSTALLS += handbrake \
     init \
+    s3cfg \
     target

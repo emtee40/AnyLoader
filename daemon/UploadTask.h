@@ -2,8 +2,9 @@
 #define UPLOADTASK_H
 
 #include "Task.h"
-class QFile;
-class QFtp;
+#include <QProcess>
+#include <QFileInfo>
+#include <QStringList>
 
 class UploadTask : public Task
 {
@@ -21,17 +22,17 @@ protected:
 
 private:
 	void queueNext();
-	QFtp *m_ftp;
+	const QString m_s3Prefix;
+	const QStringList m_s3BaseArguments;
 	int m_currentFileIndex;
 	QString m_status;
-	int m_fileUpload;
-	int m_sizeQuery;
-	QFile *m_currentFile;
+	QProcess *m_process;
+	QFileInfo m_currentFile;
 
 private slots:
-	void storeUploadProgress(qint64 done, qint64 total);
-	void commandFinished(int id, bool error);
-	void rawCommandReply(int replyCode, const QString &detail);
+	void sizeQueryFinished(int exitCode, QProcess::ExitStatus exitStatus);
+	void readStatus();
+	void uploadFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 signals:
 	void uploadProgress(qint64 done, qint64 total);
