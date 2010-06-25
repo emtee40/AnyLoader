@@ -29,7 +29,7 @@ body,input,textarea,pre { font-family: "Myriad Pro", Myriad, "Myriad Web Pro", H
 </head>
 <body>
 <img src="http://labs.anyclip.com/labs-logo.png" style="float:right">
-<h2>AnyLoader<br><font size="-1"><i>Version 1.0</i></font></h2>
+<h2>AnyLoader<br><font size="-1"><i>Version 1.1</i></font></h2>
 <?php
 function yesno($bool)
 {
