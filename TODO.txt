@@ -1,0 +1,60 @@
+
+= Current Releases =
+
+== Version 1.1 ==
+* Uses S3 instead of FTP
+
+== Version 1.0 ==
+* Decoupled web interface and controller daemon
+* Encodes and uploads in parallel
+** Encodes all three encodes before moving onto upload
+* Ability to change audio track and video track
+* Loads from specified ISO directory
+* Can terminate and restart on request
+
+= Planned Releases =
+
+== Version 1.2 ==
+* External drive auto-mounter
+* Don't make web interface request so many handbrake info dumps on every load
+** Ajax call?
+* Email notification
+* Improved configuration command line arguments
+
+== Version 1.3 ==
+* Make Movie have array of hasEncoded/hasUploaded variables - bool Movie::hasEncoded(int index) - so that we don't have to wait for three to encode before uploading, in correspondence with m_mp4Locations
+* Figure out better way of combining TitleInformation class and hasEncoded/m_mp4Locations arrays
+** Perhaps make those arrays dictionaries between TitleInformation pointer and bool/QString
+
+== Version 1.4 ==
+* Make Controller have array of XTasks
+** Currently fixed at size 1, setting infrastructure for version 1.5
+* Split trackSet into two signals - audioTrack set and videoTrack set - each of which trigger the correct queue
+** Don't simply loop through all the movies -- see if the one that is set can be queued
+
+== Version 1.5 ==
+* QSettings interface to get away from hard coded encoding presets
+* Store states
+* TCP protocol overhaul
+
+== Version 1.6 ==
+* Rename anyloader to anyloaderd, and rename daemon directory
+* Use global config file (/etc/anyloaderd.conf)
+* Bind to private subnet instead of 0.0.0.0
+** iptables configuration?
+* Create handbreakd that executes handbrake tasks remotely
+** Configure Controller's XTasks to read from QSettings for IP addresses
+
+== Version 1.7 ==
+* Integration with Chris' NAS
+* More sane directory/mount point/network share method
+* UPnP / Zeroconf / Multicast auto-configuration of handbraked servers
+
+== Version 1.8 ==
+* User interface overhaul -- full AJAX
+* Movie list reordering
+* Batches
+
+== Version 1.9 ==
+* API title loading?
+
